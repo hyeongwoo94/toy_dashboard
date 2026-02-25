@@ -1,6 +1,72 @@
-260225
-vite + react 설치
-scss설치
+
+------------------------------------------------------------
+작업순서
+데이터흐름 설계
+실제 시작
+-api 모듈 제작
+getTasks
+getTask
+createTask
+updateTask
+deleteTask
+-takst 훅 설계
+-대쉬보드 최소버전
+-crud붙이기
+로그인
+------------------------------------------------------------
+task = todo
+task의 속성 예제
+{
+    id: number
+    title: string
+    description: string
+    status: "todo" | "in-progress" | "done"
+    priority: "low" | "medium" | "high"
+    dueDate: string
+    createdAt: string
+}
+너가 회사에서 일한다고 가정하자.
+
+상사가 업무를 생성한다 → Task 생성
+
+네가 작업을 시작한다 → status 변경
+
+완료한다 → done 처리
+
+늦으면 → dueDate 체크
+
+중요하면 → priority high
+
+이걸 관리하는 대시보드가 이번 프로젝트다.
+
+이앱의 핵심은 task의 변화이다.
+------------------------------------------------------------
+
+업무용 태스크 관리 대시보드
+
+필수 기능:
+
+- 로그인 mock
+- 리스트 CRUD
+- 필터/정렬
+- 상세 페이지
+- 폼 validation
+- API 상태 관리
+
+여기서 중요한 건:
+
+✔ 폴더 구조 스스로 설계
+
+✔ 상태 어디에 둘지 고민
+
+✔ 커스텀 훅 분리
+
+4주차 마지막:
+
+👉 “왜 이렇게 설계했는지” 문서 작성
+
+
+------------------------------------------------------------
 src/
 ├─ api/                 # API 호출 모듈
 │   └─ tasks.ts
