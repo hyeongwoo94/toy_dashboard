@@ -1,12 +1,12 @@
 import './App.scss'
-
+import Index from './pages/index'
+import LoginPage from './pages/login/LoginPage'
 function App() {
 
   return (
     <>
-      <div className='test'>안녕
-        <div className='test_text'>작은것</div>
-      </div>
+      <Index />
+      <LoginPage />
     </>
   )
 }
