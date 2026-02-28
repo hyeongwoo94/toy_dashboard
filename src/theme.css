@@ -1,0 +1,136 @@
+/**
+ * 디자인 토큰
+ * 라이트/다크 모드 색상 및 공통 스케일
+ */
+
+:root,
+[data-theme="light"] {
+    /* 배경 — 살짝 따뜻한 톤 */
+    --color-bg: #f6f5f3;
+    --color-bg-surface: #ffffff;
+    /*상태메세지 색상 */
+    --color-error: #b91c1c;
+    --color-error-hover: #991b1b;
+    --color-error-bg: #fef2f2;
+    --color-success: #15803d;
+    --color-success-hover: #166534;
+    --color-success-bg: #ecfdf5;
+
+    /* 텍스트 */
+    --color-text: #0f172a;
+    --color-text-w: #fff;
+    --color-text-muted: #5c6b7a;
+
+    /* 포인트/액센트 — 전문성 (블루 계열) */
+    --color-primary: #0b3c5d;
+    --color-primary-hover: #082d47;
+    --color-accent: #00c2ff;
+    --color-accent-hover: #33cdff;
+
+    /* 보조 */
+    --color-border: #e5e2dd;
+    --color-focus-ring: #00c2ff;
+    /* 모달/패널 — 라이트에서는 검은 그림자 */
+    --shadow-modal:
+        rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    --color-modal-edge: transparent;
+}
+
+[data-theme="dark"] {
+    /* 배경 */
+    --color-bg: #0b1120;
+    --color-bg-surface: #1a2332;
+
+    /* 텍스트 */
+    --color-text: #e8e6e3;
+    --color-text-muted: #9ca3af;
+
+    /* 포인트/액센트 */
+    --color-primary: #1e3a8a;
+    --color-primary-hover: #2563eb;
+    --color-accent: #22d3ee;
+    --color-accent-hover: #67e8f9;
+
+    /* 보조 */
+    --color-border: #334155;
+    --color-focus-ring: #22d3ee;
+    /* 모달/패널 — 다크에서는 진한 그림자 + 얇은 밝은 테두리로 구분 */
+    --shadow-modal:
+        0 -4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    --color-modal-edge: rgba(255, 255, 255, 0.08);
+}
+
+/* 공통 스케일 (모드 무관) — px, 반응형: 모바일(기본) / 태블릿 768px~ / 데스크톱 1024px~ */
+:root {
+    /* 모바일 (기본) */
+    --font-size-xs: 1.1rem;
+    --font-size-sm: 1.3rem;
+    --font-size-base: 1.4rem;
+    --font-size-lg: 1.6rem;
+    --font-size-xl: 2rem;
+    --font-size-2xl: 2.4rem;
+
+    --spacing-xs: 0.3rem;
+    --spacing-sm: 0.6rem;
+    --spacing-md: 1.2rem;
+    --spacing-lg: 1.8rem;
+    --spacing-xl: 2.4rem;
+
+    --radius-sm: 0.3rem;
+    --radius-md: 0.6rem;
+    --radius-lg: 1rem;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+}
+
+@media (min-width: 768px) {
+    :root {
+        /* 태블릿 */
+        --font-size-xs: 1.2rem;
+        --font-size-sm: 1.4rem;
+        --font-size-base: 1.5rem;
+        --font-size-lg: 1.8rem;
+        --font-size-xl: 2.2rem;
+        --font-size-2xl: 2.8rem;
+
+        --spacing-xs: 0.4rem;
+        --spacing-sm: 0.8rem;
+        --spacing-md: 1.4rem;
+        --spacing-lg: 2.2rem;
+        --spacing-xl: 2.8rem;
+
+        --radius-sm: 0.4rem;
+        --radius-md: 0.8rem;
+        --radius-lg: 1.2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    :root {
+        /* 데스크톱 */
+        --font-size-xs: 1.2rem;
+        --font-size-sm: 1.4rem;
+        --font-size-base: 1.6rem;
+        --font-size-lg: 2rem;
+        --font-size-xl: 2.4rem;
+        --font-size-2xl: 3.2rem;
+
+        --spacing-xs: 0.4rem;
+        --spacing-sm: 0.8rem;
+        --spacing-md: 1.6rem;
+        --spacing-lg: 2.4rem;
+        --spacing-xl: 3.2rem;
+
+        --radius-sm: 0.4rem;
+        --radius-md: 0.8rem;
+        --radius-lg: 1.2rem;
+
+        --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.12);
+        --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.25);
+    }
+}
