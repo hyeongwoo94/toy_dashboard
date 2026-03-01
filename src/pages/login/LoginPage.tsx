@@ -4,7 +4,7 @@ import { useAuthStore } from "../../features/auth/authStore";
 import LoginInput from "./component/LoginInput";
 
 function LoginPage() {
-    const [username, setUsername] = useState("");
+    const [loginId, setLoginId] = useState("");
     const [password, setPassword] = useState("");
     const login = useAuthStore((state) => state.login);
 
@@ -21,8 +21,8 @@ function LoginPage() {
                                 placeholder="아이디입력"
                                 errorMsg="아이디 잘못입력함"
                                 successMsg="올바르게 입력"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={loginId}
+                                onChange={(e) => setLoginId(e.target.value)}
                             />
                         </li>
                         <li>
@@ -40,7 +40,7 @@ function LoginPage() {
                     <Btn
                         text="로그인"
                         btnClass=""
-                        onClick={() => login(username || "user", "member")}
+                        onClick={() => login(loginId || "user", "member")}
                     />
                 </div>
             </div>
