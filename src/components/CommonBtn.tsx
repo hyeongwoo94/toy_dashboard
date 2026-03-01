@@ -2,12 +2,13 @@
 interface CommonBtnProps {
     text: string;
     btnClass?: string;
+    type?: 'button' | 'submit' | 'reset';
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function CommonBtn({ text, btnClass = "", onClick }: CommonBtnProps) {
+function CommonBtn({ text, btnClass = "", type = "button", onClick }: CommonBtnProps) {
     return (
-        <button type="button" className={`common_btn ${btnClass}`} onClick={onClick}>
+        <button type={type} className={`common_btn ${btnClass}`} onClick={onClick}>
             {text}
         </button>
     );
