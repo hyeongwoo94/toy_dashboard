@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Btn from "../../components/CommonBtn";
 import { useAuthStore } from "../../features/auth/authStore";
+import { checkLogin } from "./features/checkLogin";
 import LoginInput from "./component/LoginInput";
 
 function LoginPage() {
@@ -40,7 +41,10 @@ function LoginPage() {
                     <Btn
                         text="로그인"
                         btnClass=""
-                        onClick={() => login(loginId || "user", "member")}
+                        onClick={() => {
+                            const user = checkLogin(loginId, password);
+                            if (user) login(user.name, user.role);
+                        }}
                     />
                 </div>
             </div>
