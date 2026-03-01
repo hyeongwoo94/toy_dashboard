@@ -5,6 +5,8 @@ interface CommonInputProps {
     placeholder: string;
     errorMsg: string;
     successMsg: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function CommonInput({
@@ -13,15 +15,19 @@ function CommonInput({
     placeholder,
     errorMsg,
     successMsg,
+    value,
+    onChange,
 }: CommonInputProps) {
     return (
         <>
             <div className="common_input">
                 <input
                     className="-input"
-                    type={`${type}`}
-                    aria-label={`${label}`}
-                    placeholder={`${placeholder}`}
+                    type={type}
+                    aria-label={label}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
                 />
                 <p className="input_status_text -error">{errorMsg}</p>
                 <p className="input_status_text -success">{successMsg}</p>
