@@ -61,9 +61,10 @@
     .input_status_text {
         display: none;
         position: absolute;
-        bottom: -1.8rem;
-        left: 0;
+        right: 1rem;
         font-size: var(--font-size-xs);
+        top: 50%;
+        transform: translateY(-50%);
         &.on {
             display: block;
         }

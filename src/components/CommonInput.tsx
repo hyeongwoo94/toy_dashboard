@@ -7,6 +7,8 @@ interface CommonInputProps {
     successMsg: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    /** true일 때 에러 메시지에 on 클래스가 붙어 보입니다 */
+    showError?: boolean;
 }
 
 function CommonInput({
@@ -17,6 +19,7 @@ function CommonInput({
     successMsg,
     value,
     onChange,
+    showError = false,
 }: CommonInputProps) {
     return (
         <>
@@ -29,7 +32,7 @@ function CommonInput({
                     value={value}
                     onChange={onChange}
                 />
-                <p className="input_status_text -error">{errorMsg}</p>
+                <p className={`input_status_text -error${showError ? ' on' : ''}`}>{errorMsg}</p>
                 <p className="input_status_text -success">{successMsg}</p>
             </div>
         </>
