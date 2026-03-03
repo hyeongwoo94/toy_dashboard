@@ -38,6 +38,7 @@
                 color: var(--color-text-w);
                 cursor: pointer;
                 transition: box-shadow 0.2s;
+                line-height: 1.3;
                 &:hover {
                     box-shadow: var(--shadow-modal);
                     transition: box-shadow 0.2s;
@@ -91,6 +92,7 @@
         border: solid 1px var(--color-border);
         border-radius: var(--radius-md);
         padding: var(--spacing-sm);
+        outline: none;
         &:placeholder {
             color: var(--color-text-muted);
         }
