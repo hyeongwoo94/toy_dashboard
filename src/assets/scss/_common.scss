@@ -1,3 +1,69 @@
+// 메인 레이아웃
+.main_layout{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+    overflow: hidden;
+    .change_content{
+        flex: 1;
+        height: 100%;
+        overflow: auto;
+    }
+}
+//공통 메뉴
+.side_bar{
+    background-color: red;
+    height: 100%;
+    overflow-y: auto;
+    width: 250px;
+    transition: width 0.3s;
+}
+//헤더
+.header{
+    background-color: var(--color-bg);
+    &_layout{
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        box-sizing: border-box;
+        border-bottom: solid 1px var(--color-border);
+        @media (max-width: 768px) {
+            padding: 10px 15px;
+        }
+        ._left{
+            @media (max-width: 768px) {
+                max-width: 120px;
+            }
+            .logo_box{
+                svg{
+                    width: 100%;
+                }
+            }
+        }
+        ._right{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+            .user_name{
+                width: max-content;
+                font-size: var(--font-size-base);
+                color: var(--color-text);
+            }
+            .logout_btn{
+                button{
+                    width: max-content;
+                    padding: 0.5rem;
+                }
+            }
+        }
+    }
+}
+
 // 404 페이지
 .page_404{
     width: 100%;

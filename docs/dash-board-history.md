@@ -14,6 +14,10 @@
 ProtectedRoute 완성 000
 
 Dashboard 뼈대 UI
+ㄴ 헤더
+ㄴ 메인영역
+ㄴ 로그인 유저 이름 표시
+ㄴ 헤더/메인 컴포넌트 분리
 
 API 모듈 작성
 

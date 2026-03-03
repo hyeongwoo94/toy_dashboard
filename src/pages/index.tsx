@@ -1,14 +1,28 @@
 import { useAuthStore } from "../features/auth/authStore";
+import Header from "./layout/header";
+import SideBar from "./layout/sideBar";
 
 function Index() {
-    const logout = useAuthStore((state) => state.logout);
-
     return (
         <>
-            <p>메인페이지</p>
-            <button type="button" onClick={logout}>
-                로그아웃
-            </button>
+            <Header />
+            <div className="main_layout">
+                <SideBar />
+                <div className="change_content">
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                    <p style={{fontSize:"100px"}}>안녕</p>
+                </div>
+            </div>
         </>
     );
 }
