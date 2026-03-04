@@ -6,21 +6,12 @@ function Index() {
     return (
         <>
             <Header />
-            <div className="main_layout">
-                <SideBar />
-                <div className="change_content">
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
-                    <p style={{fontSize:"100px"}}>안녕</p>
+            <div className="main_wrap">
+                <div className="main_grid">
+                    <div className="main_grid_box _list">1</div>
+                    <div className="main_grid_box _calender">2</div>
+                    <div className="main_grid_box _myWork">3</div>
+                    <div className="main_grid_box _notice_list">4</div>
                 </div>
             </div>
         </>

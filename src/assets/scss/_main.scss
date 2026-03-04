@@ -1,0 +1,77 @@
+//헤더
+.header{
+    background-color: var(--color-bg);
+    &_layout{
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        box-sizing: border-box;
+        border-bottom: solid 1px var(--color-border);
+        @media (max-width: 768px) {
+            padding: 10px 15px;
+        }
+        ._left{
+            @media (max-width: 768px) {
+                max-width: 120px;
+            }
+            .logo_box{
+                svg{
+                    width: 100%;
+                }
+            }
+        }
+        ._right{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+            .user_name{
+                width: max-content;
+                font-size: var(--font-size-base);
+                color: var(--color-text);
+            }
+            .logout_btn{
+                button{
+                    width: max-content;
+                    padding: 0.5rem;
+                }
+            }
+        }
+    }
+    &_menu{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+}
+// 메인 레이아웃
+.main{
+    &_wrap{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        flex: 1;
+        overflow: hidden;
+    }
+    &_grid{
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        height: 100%;
+        width: 100%;
+        grid-template-areas: 
+        "main_list main_list main_calender"
+        "main_list main_list main_calender"
+        "main_mywork main_notice_list main_notice_list"
+        "main_mywork main_notice_list main_notice_list";
+        ._list{ grid-area: main_list;}
+        ._calender{grid-area: main_calender;}
+        ._myWork{grid-area: main_mywork;}
+        ._notice_list{grid-area: main_notice_list;}
+    }    
+}

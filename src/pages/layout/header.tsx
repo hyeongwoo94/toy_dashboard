@@ -21,6 +21,20 @@ function Header() {
                             </svg>
                         </Link>
                     </div>
+                    <ul className="header_menu">
+                        <li>
+                            <Link to=''>메뉴1</Link>
+                        </li>
+                        <li>
+                            <Link to=''>메뉴1</Link>
+                        </li>
+                        <li>
+                            <Link to=''>메뉴1</Link>
+                        </li>
+                        <li>
+                            <Link to=''>메뉴1</Link>
+                        </li>
+                    </ul>
                     <div className="_right">
                         <p className="user_name">{name ?? ""}</p>
                         <div className="logout_btn">
