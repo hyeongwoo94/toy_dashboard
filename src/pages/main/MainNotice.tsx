@@ -1,14 +1,23 @@
-import CommonList from "../../components/List";
+import CommonList from "../../components/CommonList";
 const columns = [
     { label: "번호", width: "7%" },
-    { label: "제목", },
+    { label: "제목" },
     { label: "작성자", width: "15%" },
     { label: "날짜", width: "18%" },
-    { label: "상태", width:"15%"},
+    { label: "상태", width: "15%" },
 ];
 
 const rows = [
-    { to: "/", cells: ["1", "첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목", "홍길동", "2025-03-01", "완료"] },
+    {
+        to: "/",
+        cells: [
+            "1",
+            "첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목첫 번째 제목",
+            "홍길동",
+            "2025-03-01",
+            "완료",
+        ],
+    },
     { to: "/", cells: ["2", "두 번째 제목", "김철수", "2025-03-02", "진행중"] },
     { to: "/", cells: ["3", "세 번째 제목", "이영희", "2025-03-03", "대기"] },
     { to: "/", cells: ["4", "네 번째 제목", "박민수", "2025-03-04", "완료"] },
@@ -17,11 +26,14 @@ const rows = [
 ];
 
 function MainNotice() {
-
     return (
         <>
             <h2 className="main_list_title">공지사항</h2>
-            <CommonList columns={columns} rows={rows}  emptyMsg="공지사항이 없습니다." />
+            <CommonList
+                columns={columns}
+                rows={rows}
+                emptyMsg="공지사항이 없습니다."
+            />
         </>
     );
 }

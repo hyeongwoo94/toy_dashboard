@@ -15,7 +15,7 @@ export interface CommonListRow {
 interface CommonListProps {
     /** 헤더 컬럼 설정 (개수·width 부모에서 지정) */
     columns: CommonListColumn[];
-    /** 바디 행 데이터. 각 row.cells 길이는 columns 길이와 같아야 함 */
+    /** 바디 행 데이터. 각 row.cells 개수는 columns 개수와 같아야 함 */
     rows: CommonListRow[];
     emptyMsg: string
 }
