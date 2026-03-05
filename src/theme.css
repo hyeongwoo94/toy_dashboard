@@ -34,6 +34,10 @@
     --shadow-modal:
         rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     --color-modal-edge: transparent;
+
+    /* 스크롤 색상 */
+    --scroll-color: #386481;
+    --scroll-color-bg: #fff;
 }
 
 [data-theme="dark"] {

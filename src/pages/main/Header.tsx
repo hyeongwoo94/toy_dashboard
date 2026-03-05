@@ -1,6 +1,5 @@
 import CommonBtn from "../../components/CommonBtn";
 import { useAuthStore } from "../../features/auth/authStore";
-import logoImg from "../../assets/img/logo.png";
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -13,7 +12,7 @@ function Header() {
                     <div className="_left">
                         <Link to ="/" className="logo_box">
                             <svg width="275" viewBox="0 0 275 50" xmlns="http://www.w3.org/2000/svg">
-                                <text x="5" y="40" font-family="Arial, sans-serif" font-weight="900" font-size="42" letter-spacing="-1">
+                                <text x="5" y="40" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="42" letterSpacing="-1">
                                     <tspan fill="#003366">Bigbro</tspan>
                                     <tspan fill="#003366">_</tspan>
                                     <tspan fill="#FF6600">woo</tspan>

@@ -1,6 +1,7 @@
 //헤더
 .header{
     background-color: var(--color-bg);
+    width: 100%;
     &_layout{
         width: 100%;
         margin: 0 auto;
@@ -53,25 +54,57 @@
     &_wrap{
         display: flex;
         align-items: center;
+        flex-direction: column;
         height: 100%;
         width: 100%;
-        flex: 1;
-        overflow: hidden;
     }
     &_grid{
+        flex: 1;
         max-width: 1280px;
         margin: 0 auto;
         display: grid;
         height: 100%;
         width: 100%;
+        gap: 2rem;
+        overflow: hidden;
+        padding: 10px 0;
+        box-sizing: border-box;
+        grid-template-rows: 1fr 1fr;  // 행 높이 고정 → 자식이 이 안에 맞춤
+        grid-template-columns: 1fr 1fr 1fr; 
         grid-template-areas: 
         "main_list main_list main_calender"
-        "main_list main_list main_calender"
-        "main_mywork main_notice_list main_notice_list"
         "main_mywork main_notice_list main_notice_list";
-        ._list{ grid-area: main_list;}
+        .main_grid_box{
+            min-height: 0;           // 그리드 행 높이를 넘지 않게 (필수)
+            min-width: 0;           // 그리드 열 너비를 넘지 않게 (max-width 준수)
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        ._list{ 
+            grid-area: main_list;
+        }
         ._calender{grid-area: main_calender;}
         ._myWork{grid-area: main_mywork;}
         ._notice_list{grid-area: main_notice_list;}
+        @media (max-width: 1280px) {
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+            grid-template-rows: 1fr 1fr 1fr 1fr;  // 행 높이 고정 → 자식이 이 안에 맞춤
+            grid-template-columns: 1fr;  
+            grid-template-areas: 
+            "main_list"
+            "main_calender"
+            "main_mywork"
+            "main_notice_list";
+        }
     }    
+}
+//메인 공통 타이틀
+.main_list_title{
+    font-size: var(--font-size-lg);
+    color: var(--color-text);
+    margin-bottom: 5px;
 }
