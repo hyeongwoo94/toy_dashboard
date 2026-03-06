@@ -1,4 +1,4 @@
-import Header from "./main/Header";
+import Header from "./common/Header";
 import MainList from "./main/MainList";
 import MainNotice from "./main/MainNotice";
 import MyWorkList from "./main/MyWorkList";

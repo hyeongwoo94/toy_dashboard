@@ -101,11 +101,11 @@ textarea:not([rows]) {
 
 body{
     height: 100%;
+    background-color: var(--color-bg);
 }
 #root{
     height: 100%;
-    display: flex;
-    flex-direction: column;
+
 }
 
 

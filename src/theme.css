@@ -5,9 +5,7 @@
 
 :root,
 [data-theme="light"] {
-    /* 배경 — 살짝 따뜻한 톤 */
-    --color-bg: #f6f5f3;
-    --color-bg-surface: #ffffff;
+
     /*상태메세지 색상 */
     --color-error: #b91c1c;
     --color-error-hover: #991b1b;
@@ -16,28 +14,51 @@
     --color-success-hover: #166534;
     --color-success-bg: #ecfdf5;
 
-    /* 텍스트 */
-    --color-text: #0f172a;
-    --color-text-w: #fff;
-    --color-text-muted: #5c6b7a;
+    /* 배경 */
+    --color-bg: #F6F5F5;
+    --color-header-bg: #FFFFFF;
+    --header-border: #D3E0EA;
 
-    /* 포인트/액센트 — 전문성 (블루 계열) */
-    --color-primary: #0b3c5d;
-    --color-primary-hover: #082d47;
-    --color-accent: #00c2ff;
-    --color-accent-hover: #33cdff;
+    /* 텍스트 */
+    --color-text: #1F2937;
+    --color-text-w: #FFFFFF;
+    --color-text-muted: #6B7280;
+
+    /* 브랜드 Primary */
+    --color-primary: #276678;
+    --color-primary-hover: #1F5566;
+
+    /* 액센트 */
+    --color-accent: #1687A7;
+    --color-accent-hover: #12718C;
 
     /* 보조 */
-    --color-border: #e5e2dd;
-    --color-focus-ring: #00c2ff;
+    --color-border: #D3E0EA;
+
+    /* 스크롤 */
+    --scroll-color: #276678;
+    --scroll-color-bg: #D3E0EA;
+    /* TABLE */
+
+    --table-header-bg: #D3E0EA;
+    --table-header-text: #276678;
+
+    --table-body-bg: #FFFFFF;
+    --table-body-text: #1F2937;
+    /* 2n배경색상 */
+    --table-row-stripe: #F7FBFD; 
+
+    --table-row-hover: #F0F7FA;
+
+    --table-border: #D3E0EA;
+    --table-divider: #E7EEF3;
+
     /* 모달/패널 — 라이트에서는 검은 그림자 */
     --shadow-modal:
         rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     --color-modal-edge: transparent;
 
-    /* 스크롤 색상 */
-    --scroll-color: #386481;
-    --scroll-color-bg: #fff;
+
 }
 
 [data-theme="dark"] {

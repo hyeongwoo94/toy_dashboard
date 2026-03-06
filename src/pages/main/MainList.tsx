@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import CommonList from "../../components/CommonList";
 
 const columns = [
@@ -58,7 +59,12 @@ const rows = [
 function MainList() {
     return (
         <>
-            <h2 className="main_list_title">전체 업무</h2>
+            <div className="main_table_title_box">
+                <h2 className="_title">전체 업무</h2>
+                <Link to ='' className="_btn">
+                    더보기
+                </Link>
+            </div>
             <CommonList
                 columns={columns}
                 rows={rows}

@@ -1,4 +1,8 @@
 .login_sec {
+    @media (max-width: 768px) {
+        padding: 10px;
+        box-sizing: border-box;
+    }
     .-wrap {
         max-width: 450px;
         width: 100%;

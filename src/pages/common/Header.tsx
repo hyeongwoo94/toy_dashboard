@@ -11,13 +11,13 @@ function Header() {
                 <div className="header_layout">
                     <div className="_left">
                         <Link to ="/" className="logo_box">
-                            <svg width="275" viewBox="0 0 275 50" xmlns="http://www.w3.org/2000/svg">
-                                <text x="5" y="40" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="42" letterSpacing="-1">
-                                    <tspan fill="#003366">Bigbro</tspan>
-                                    <tspan fill="#003366">_</tspan>
-                                    <tspan fill="#FF6600">woo</tspan>
-                                </text>
-                            </svg>
+                        <svg width="275" viewBox="0 0 275 50" xmlns="http://www.w3.org/2000/svg">
+                            <text x="5" y="40" font-family="Arial, sans-serif" font-weight="900" font-size="42" letter-spacing="-1">
+                            <tspan fill="#276678">Bigbro</tspan>
+                            <tspan fill="#1687A7">_</tspan>
+                            <tspan fill="#1687A7">woo</tspan>
+                            </text>
+                        </svg>
                         </Link>
                     </div>
                     <ul className="header_menu">

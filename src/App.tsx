@@ -5,6 +5,10 @@ import { useAuthStore } from "./features/auth/authStore";
 import Index from "./pages/index";
 import LoginPage from "./pages/login/LoginPage";
 import NotFound from "./pages/error/NotFound";
+import SubPageLayout from "./pages/common/SubPageLayout";
+import TaskList from "./pages/tesk/TaskList";
+import TaskEdit from "./pages/tesk/TaskEdit";
+import TaskView from "./pages/tesk/TaskView";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -17,6 +21,7 @@ function App() {
 
     return (
         <Routes>
+            {/* 메인페이지 */}
             <Route
                 path="/"
                 element={
@@ -25,13 +30,28 @@ function App() {
                     </ProtectedRoute>
                 }
             />
+            {/* 로그인페이지 */}
             <Route
                 path="/login"
                 element={
                     isLoggedIn ? <Navigate to="/" replace /> : <LoginPage />
                 }
             />
+            {/* 404 페이지 */}
             <Route path="*" element={<NotFound />} />
+            {/* task페이지 */}
+            <Route
+                path="/task"
+                element={
+                    <ProtectedRoute>
+                        <SubPageLayout />
+                    </ProtectedRoute>
+                }
+            >
+                <Route index element={<TaskList />} />
+                <Route path="edit" element={<TaskEdit />} />
+                <Route path=":id" element={<TaskView />} />
+            </Route>
         </Routes>
     );
 }
