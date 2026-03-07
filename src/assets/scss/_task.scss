@@ -1,0 +1,119 @@
+.task_edit {
+    flex: 1;
+    height: 100%;
+    &_title {
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        color: var(--color-text);
+    }
+    &_wrap {
+        flex: 1;
+        background-color: var(--color-bg-w);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        border: solid 3px var(--color-border);
+        height: 100%;
+    }
+    &_form {
+        height: 100%;
+    }
+    .task_item {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        height: 100%;
+        ._item_flex {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            &._full_height_item {
+                flex: 1;
+            }
+        }
+        ._item_w_50 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 50%;
+        }
+        .common_input {
+            width: 100%;
+        }
+        ._view_text {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            border-bottom: solid 1px var(--color-border);
+            line-height: 1.3;
+            padding: 0.5rem 0;
+        }
+        ._task_label {
+            display: inline-block;
+            font-size: var(--font-size-base);
+            color: var(--color-text);
+            font-weight: 600;
+            min-width: 6rem;
+        }
+    }
+}
+.task_edit_textarea {
+    width: 100%;
+    height: 100%;
+    &_view {
+        width: 100%;
+        height: 100%;
+        background-color: #f0f0f0;
+        border-radius: var(--radius-md);
+        border: solid 1px var(--color-border);
+        padding: 1.5rem;
+        font-size: var(--font-size-base);
+    }
+}
+.task_state_list {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    .task_state_item {
+        ._btn {
+            padding: 0.5rem 1rem;
+            font-size: var(--font-size-sm);
+            border-radius: var(--radius-md);
+            border: solid 1px var(--color-border);
+            cursor: pointer;
+            &.request {
+                background-color: #dbeafe;
+                color: #1e40af;
+                border-color: #93c5fd;
+            }
+            &.prgress {
+                background-color: #fef3c7;
+                color: #b45309;
+                border-color: #fcd34d;
+            }
+            &.review {
+                background-color: #ede9fe;
+                color: #6d28d9;
+                border-color: #c4b5fd;
+            }
+            &.complete {
+                background-color: #d1fae5;
+                color: #047857;
+                border-color: #6ee7b7;
+            }
+            &.low {
+                background-color: #fef3c7;
+                color: #b45309;
+                border-color: #fcd34d;
+            }
+            &.medium {
+                background-color: #d1fae5;
+                color: #047857;
+                border-color: #6ee7b7;
+            }
+            &.high {
+                background-color: #fee2e2;
+                color: #b91c1c;
+                border-color: #fca5a5;
+            }
+        }
+    }
+}

@@ -50,7 +50,7 @@ function App() {
             >
                 <Route index element={<TaskList />} />
                 <Route path="edit" element={<TaskEdit />} />
-                <Route path=":id" element={<TaskView />} />
+                <Route path="view" element={<TaskView />} />
             </Route>
         </Routes>
     );

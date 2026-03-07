@@ -5,7 +5,6 @@
 
 :root,
 [data-theme="light"] {
-
     /*상태메세지 색상 */
     --color-error: #b91c1c;
     --color-error-hover: #991b1b;
@@ -15,50 +14,49 @@
     --color-success-bg: #ecfdf5;
 
     /* 배경 */
-    --color-bg: #F6F5F5;
-    --color-header-bg: #FFFFFF;
-    --header-border: #D3E0EA;
+    --color-bg: #f6f5f5;
+    --color-bg-w: #fff;
+    --color-header-bg: #ffffff;
+    --header-border: #d3e0ea;
 
     /* 텍스트 */
-    --color-text: #1F2937;
-    --color-text-w: #FFFFFF;
-    --color-text-muted: #6B7280;
+    --color-text: #1f2937;
+    --color-text-w: #ffffff;
+    --color-text-muted: #6b7280;
 
     /* 브랜드 Primary */
     --color-primary: #276678;
-    --color-primary-hover: #1F5566;
+    --color-primary-hover: #1f5566;
 
     /* 액센트 */
-    --color-accent: #1687A7;
-    --color-accent-hover: #12718C;
+    --color-accent: #1687a7;
+    --color-accent-hover: #12718c;
 
     /* 보조 */
-    --color-border: #D3E0EA;
+    --color-border: #d3e0ea;
 
     /* 스크롤 */
     --scroll-color: #276678;
-    --scroll-color-bg: #D3E0EA;
+    --scroll-color-bg: #d3e0ea;
     /* TABLE */
 
-    --table-header-bg: #D3E0EA;
+    --table-header-bg: #d3e0ea;
     --table-header-text: #276678;
 
-    --table-body-bg: #FFFFFF;
-    --table-body-text: #1F2937;
+    --table-body-bg: #ffffff;
+    --table-body-text: #1f2937;
     /* 2n배경색상 */
-    --table-row-stripe: #F7FBFD; 
+    --table-row-stripe: #f7fbfd;
 
-    --table-row-hover: #F0F7FA;
+    --table-row-hover: #f0f7fa;
 
-    --table-border: #D3E0EA;
-    --table-divider: #E7EEF3;
+    --table-border: #d3e0ea;
+    --table-divider: #e7eef3;
 
     /* 모달/패널 — 라이트에서는 검은 그림자 */
     --shadow-modal:
         rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     --color-modal-edge: transparent;
-
-
 }
 
 [data-theme="dark"] {
