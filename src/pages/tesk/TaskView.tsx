@@ -20,7 +20,7 @@ function TaskView() {
     ];
     return (
         <>
-            <h2 className="task_edit_title">업무 요청</h2>
+            {/* 뒤로가기 목록으로가기 버튼 추가하자. */}
             <div className="task_edit">
                 <div className="task_edit_wrap">
                     <form action="" className="task_edit_form">
