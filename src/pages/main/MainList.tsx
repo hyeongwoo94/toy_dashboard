@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import CommonList from "../../components/CommonList";
 
 const columns = [
-    { label: "번호", width: "7%" },
+    { label: "번호", width: "10%" },
     { label: "제목" },
     { label: "작성자", width: "15%" },
     { label: "날짜", width: "18%" },

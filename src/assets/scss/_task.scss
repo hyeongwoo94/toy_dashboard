@@ -55,6 +55,12 @@
         }
     }
 }
+.task_view_top_btn_layout{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
 .task_edit_textarea {
     width: 100%;
     height: 100%;

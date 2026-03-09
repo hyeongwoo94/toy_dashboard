@@ -59,43 +59,7 @@
         }
     }
 }
-// 페이지 네이션
-.common_pagenation {
-    ._list {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 1rem;
-        height: 100%;
-        ._item {
-            min-width: 2.8rem;
-            max-width: 2.8rem;
-            max-height: 2.8rem;
-            min-height: 2.8rem;
-            display: flex;
-            height: 100%;
-            &.on {
-                .common_btn {
-                    background-color: var(--color-accent);
-                    color: var(--color-text-w);
-                    border: solid 1px var(--color-accent);
-                }
-            }
-            .common_btn {
-                color: var(--color-accent);
-                background-color: #fff;
-                border: solid 1px var(--color-accent);
-                padding: 0;
-                &:hover {
-                    background-color: var(--color-accent-hover);
-                    transition: background-color 0.2s;
-                    color: var(--color-text-w);
-                    box-shadow: none;
-                }
-            }
-        }
-    }
-}
+
 
 //헤더
 .header {
@@ -235,10 +199,6 @@
     color: var(--color-text-w);
     cursor: pointer;
     transition: box-shadow 0.2s;
-    &:hover {
-        box-shadow: var(--shadow-modal);
-        transition: box-shadow 0.2s;
-    }
     &.-cancel {
         color: var(--color-accent);
         background-color: #fff;
@@ -382,6 +342,43 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 text-align: center;
+            }
+        }
+    }
+}
+// 페이지 네이션
+.common_pagenation {
+    ._list {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+        height: 100%;
+        ._item {
+            min-width: 2.8rem;
+            max-width: 2.8rem;
+            max-height: 2.8rem;
+            min-height: 2.8rem;
+            display: flex;
+            height: 100%;
+            &.on {
+                .common_btn {
+                    background-color: var(--color-accent);
+                    color: var(--color-text-w);
+                    border: solid 1px var(--color-accent);
+                }
+            }
+            .common_btn {
+                color: var(--color-accent);
+                background-color: #fff;
+                border: solid 1px var(--color-accent);
+                padding: 0;
+                &:hover {
+                    background-color: var(--color-accent-hover);
+                    transition: background-color 0.2s;
+                    color: var(--color-text-w);
+                    box-shadow: none;
+                }
             }
         }
     }

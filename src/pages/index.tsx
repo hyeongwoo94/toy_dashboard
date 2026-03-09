@@ -1,4 +1,5 @@
 import Header from "./common/Header";
+import MainCalender from "./main/MainCalender";
 import MainList from "./main/MainList";
 import MainNotice from "./main/MainNotice";
 import MyWorkList from "./main/MyWorkList";
@@ -12,7 +13,9 @@ function Index() {
                     <div className="main_grid_box _list">
                         <MainList/>
                     </div>
-                    <div className="main_grid_box _calender">222</div>
+                    <div className="main_grid_box _calender">
+                        <MainCalender />
+                    </div>
                     <div className="main_grid_box _myWork">
                         <MyWorkList />
                     </div>

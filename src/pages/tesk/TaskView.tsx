@@ -3,6 +3,7 @@ import TaskDate from "./components/TaskDate";
 import TaskInput from "./components/TaskInput";
 import TaskState from "./components/TaskState";
 import CommonTextarea from "../../components/CommonTextarea";
+import CommonBtn from "../../components/CommonBtn";
 
 function TaskView() {
     const [status, setStatus] = useState("request");
@@ -20,7 +21,10 @@ function TaskView() {
     ];
     return (
         <>
-            {/* 뒤로가기 목록으로가기 버튼 추가하자. */}
+            <div className="task_view_top_btn_layout">
+                <CommonBtn text="뒤로가기" btnClass="-cancel"/>
+                <CommonBtn text="목록" />
+            </div>
             <div className="task_edit">
                 <div className="task_edit_wrap">
                     <form action="" className="task_edit_form">
