@@ -10,6 +10,7 @@
 | 260305 | CommonList 컴포넌트화(columns/rows/width/emptyMsg props)                                                                    |
 | 260306 | SubPageLayout + Outlet 적용 (Vue slot 패턴)                                                                                 |
 | 260307 | TaskState 컴포넌트화 상태/우선순위 색상 적용,Taskinput 제작 view/edit에서 보여지는 상태 둘다 생각해서 제작, CommonList 분석 |
+| 260309 | 라이브러리 설치: react-calendar, react-datepicker |
 
 ---
 
