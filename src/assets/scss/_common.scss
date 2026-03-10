@@ -257,6 +257,9 @@
     .-success {
         color: var(--color-success);
     }
+    .react-datepicker-wrapper{
+        width: 100%;
+    }
 }
 .common_textarea {
     background-color: var(--color-bg-w);

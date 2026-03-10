@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import TaskDate from "./components/TaskDate";
 import TaskInput from "./components/TaskInput";
 import TaskState from "./components/TaskState";
-import CommonTextarea from "../../components/CommonTextarea";
 import CommonBtn from "../../components/CommonBtn";
+import { updateTask } from "../../features/task/api";
+import TaskTextarea from "./components/TaskTextarea";
 
 function TaskView() {
+    const { id } = useParams<{ id: string }>();
     const [status, setStatus] = useState("request");
-    const [importance, setImportance] = useState("low");
+    const [importance] = useState("low");
     const stateList = [
         { value: "request", label: "요청" },
         { value: "in-progress", label: "진행" },
@@ -32,6 +35,7 @@ function TaskView() {
                             <div className="_item_flex">
                                 <div className="_item_w_50">
                                     <TaskInput
+                                        mode="view"
                                         type="text"
                                         label="제목"
                                         placeholder="제목 입력"
@@ -41,6 +45,7 @@ function TaskView() {
                                 </div>
                                 <div className="_item_w_50">
                                     <TaskInput
+                                        mode="view"
                                         type="text"
                                         label="작성자"
                                         placeholder="제목 입력"
@@ -51,6 +56,7 @@ function TaskView() {
                             <div className="_item_flex">
                                 <div className="_item_w_50">
                                     <TaskInput
+                                        mode="view"
                                         type="text"
                                         label="팀이름"
                                         placeholder="제목 입력"
@@ -60,6 +66,7 @@ function TaskView() {
                                 </div>
                                 <div className="_item_w_50">
                                     <TaskInput
+                                        mode="view"
                                         type="text"
                                         label="담당자"
                                         placeholder="제목 입력"
@@ -69,10 +76,10 @@ function TaskView() {
                             </div>
                             <div className="_item_flex">
                                 <div className="_item_w_50">
-                                    <TaskDate />
+                                    <TaskDate mode="view" label="작성일" value="" />
                                 </div>
                                 <div className="_item_w_50">
-                                    <TaskDate />
+                                    <TaskDate mode="view" label="마감일" value="" />
                                 </div>
                             </div>
                             <div className="_item_flex">
@@ -83,9 +90,7 @@ function TaskView() {
                                     <TaskState
                                         states={importanceList}
                                         currentStatus={importance}
-                                        onChange={(value) =>
-                                            setImportance(value)
-                                        }
+                                        readOnly
                                     />
                                 </div>
                                 <div className="_item_w_50">
@@ -95,17 +100,18 @@ function TaskView() {
                                     <TaskState
                                         states={stateList}
                                         currentStatus={status}
-                                        onChange={(value) => setStatus(value)}
+                                        onChange={(value) => {
+                                            if (!id) return;
+                                            setStatus(value);
+                                            updateTask(id, { status: value as "request" | "in-progress" | "review" | "done" }).catch(() => {
+                                                setStatus(status);
+                                            });
+                                        }}
                                     />
                                 </div>
                             </div>
                             <div className="_item_flex _full_height_item">
-                                <label htmlFor="" className="_task_label">
-                                    내용
-                                </label>
-                                <div className="task_edit_textarea">
-                                    <CommonTextarea />
-                                </div>
+                                <TaskTextarea mode="view" value="" />                                
                             </div>
                         </div>
                     </form>
