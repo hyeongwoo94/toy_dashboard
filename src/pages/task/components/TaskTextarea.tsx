@@ -15,7 +15,7 @@ function TaskTextarea(props: TaskTextareaProps) {
                 내용
             </label>
             {mode === "view" ? (
-                <div className="task_edit_textarea_view _view_text">
+                <div className="task_edit_textarea_view">
                     {value || <p className="empty_text">작성된 내용이 없습니다.</p>}
                 </div>
             ) : (
