@@ -271,3 +271,63 @@ export async function deleteTask(id: string): Promise<void> { ... }
 
 정리하면, **"창구를 만들려면 뭐가 필요한지"**, **"뭘 작성해야 하는지"**, **"DummyJSON이랑 어떻게 연결하는지"**는 이 문서와 `api.ts`를 같이 보면 세세하게 따라갈 수 있게 되어 있습니다.  
 궁금한 구간이 있으면 해당 줄 번호나 함수 이름을 기준으로 "이 부분만 더 풀어줘"라고 요청하면 됩니다.
+
+---
+
+## 5. (중요) DummyJSON이 “수정이 안 되는 것처럼” 보이는 이유와 해결 전략
+
+DummyJSON의 `/todos`는 **데모 API**라서, `POST/PUT/DELETE`가 호출되더라도
+실제 서비스처럼 “영구 DB에 저장되고 다음 조회에서도 그대로 반영”되는 걸 보장하지 않습니다.
+
+그래서 아래 상황이 자주 생깁니다.
+
+- **수정하기(PUT) 요청은 성공했다** (응답도 온다)
+- 그런데 **view로 돌아가서 다시 GET 하면 원래 값이 다시 내려온다**
+- 결과적으로 “수정이 안 먹는다”처럼 느껴진다
+
+### 5-1. 우리가 선택한 해결: localStorage에 상태를 저장하고, 조회 시 merge
+
+이번 프로젝트에선 “서버가 영구 저장을 안 해 주는” 부분을 앱이 보완하도록 했습니다.
+핵심 아이디어는 이것입니다.
+
+- **create/update/delete가 발생하면** 그 결과를 `localStorage`에 저장한다
+- **getTasks/getTaskById로 화면을 그릴 때는** 항상
+  - 서버에서 받은 결과(base)
+  - localStorage에 저장된 결과(override)
+  를 **합쳐서(merge)** 반환한다
+
+그래서 사용자는 “수정 저장 → 다시 열어도 바뀐 값 그대로”를 보게 됩니다.
+
+### 5-2. localStorage 저장 구조 (TaskStore)
+
+`api.ts`에 아래 구조를 둡니다.
+
+- **byId**: `{ [id]: Task }` 형태로, 특정 id의 “최신 Task 스냅샷” 저장
+- **localOnlyIds**: 서버에 없는(또는 서버가 영구 반영 안 하는) “로컬 생성 업무 id 목록”
+- **deletedIds**: 삭제 처리된 id 목록(목록/상세에서 숨기기)
+
+### 5-3. merge 규칙 (조회 시 우선순위)
+
+- **getTaskById(id)**:
+  - deletedIds에 있으면 `null`
+  - byId에 있으면 그걸 바로 반환(로컬이 최우선)
+  - 아니면 서버 GET으로 가져오고, byId가 있으면 byId 우선
+
+- **getTasks()**:
+  - 서버 목록(base)을 Task로 매핑
+  - deletedIds에 있는 항목은 제거
+  - 같은 id가 byId에 있으면 byId로 덮어쓰기
+  - localOnlyIds에 있는 로컬 생성 업무도 맨 앞에 붙여서 반환
+
+이렇게 하면 list/view/edit이 모두 같은 “최종 상태”를 보게 됩니다.
+
+### 5-4. 이 전략의 장단점
+
+- **장점**
+  - 실제 백엔드 없이도 CRUD 경험을 “진짜처럼” 만들 수 있음
+  - list/view/edit 값이 항상 일치
+
+- **단점**
+  - 다른 브라우저/기기와 데이터 공유는 안 됨(로컬에만 있음)
+  - 나중에 진짜 백엔드가 생기면, localStorage merge를 제거하거나 “서버가 진실(source of truth)”이 되도록 재설계해야 함
+
