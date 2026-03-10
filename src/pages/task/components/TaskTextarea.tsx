@@ -4,10 +4,11 @@ type TaskTextareaProps = {
     /** 'view'면 값만 p/div로 표시, 'edit' 또는 없으면 textarea 표시 (생성/수정) */
     mode?: "edit" | "view";
     value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
 function TaskTextarea(props: TaskTextareaProps) {
-    const { mode = "edit", value = "" } = props;
+    const { mode = "edit", value = "", onChange } = props;
 
     return (
         <>
@@ -17,6 +18,14 @@ function TaskTextarea(props: TaskTextareaProps) {
             {mode === "view" ? (
                 <div className="task_edit_textarea_view">
                     {value || <p className="empty_text">작성된 내용이 없습니다.</p>}
+                </div>
+            ) : value !== undefined && onChange ? (
+                <div className="task_edit_textarea">
+                    <textarea
+                        className="common_textarea"
+                        value={value}
+                        onChange={onChange}
+                    />
                 </div>
             ) : (
                 <div className="task_edit_textarea">

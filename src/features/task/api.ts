@@ -3,6 +3,10 @@ import type { Task, TaskStatus } from "./task";
 // 서버 = DummyJSON API
 const BASE_URL = "https://dummyjson.com";
 
+// DummyJSON은 create/update가 영구 반영되지 않아 화면에서 값이 "안 바뀌는 것처럼" 보일 수 있음.
+// 그래서 클라이언트에서 생성/수정/삭제를 localStorage에 저장하고, 조회 시 항상 합쳐서 반환한다.
+const TASK_LOCAL_STORE_KEY = "toy_dashboard.taskStore.v1";
+
 // DummyJSON todos 응답 형식 (그쪽 창구 형식)
 interface DummyTodo {
     id: number;
@@ -21,14 +25,59 @@ interface DummyTodosResponse {
 // 오늘 날짜 YYYY-MM-DD (커스텀용)
 const today = () => new Date().toISOString().slice(0, 10);
 
+type TaskStore = {
+    byId: Record<string, Task>;
+    localOnlyIds: string[];
+    deletedIds: string[];
+};
+
+function loadTaskStore(): TaskStore {
+    try {
+        const raw = localStorage.getItem(TASK_LOCAL_STORE_KEY);
+        if (!raw) return { byId: {}, localOnlyIds: [], deletedIds: [] };
+        const parsed = JSON.parse(raw) as TaskStore;
+        return {
+            byId: parsed.byId ?? {},
+            localOnlyIds: parsed.localOnlyIds ?? [],
+            deletedIds: parsed.deletedIds ?? [],
+        };
+    } catch {
+        return { byId: {}, localOnlyIds: [], deletedIds: [] };
+    }
+}
+
+function saveTaskStore(store: TaskStore) {
+    localStorage.setItem(TASK_LOCAL_STORE_KEY, JSON.stringify(store));
+}
+
+function upsertLocalTask(task: Task, options?: { localOnly?: boolean }) {
+    const store = loadTaskStore();
+    store.byId[task.id] = task;
+    if (options?.localOnly) {
+        if (!store.localOnlyIds.includes(task.id)) store.localOnlyIds.unshift(task.id);
+    }
+    // 수정/생성되면 삭제 목록에서 제거
+    store.deletedIds = store.deletedIds.filter((x) => x !== task.id);
+    saveTaskStore(store);
+}
+
+function markDeleted(id: string) {
+    const store = loadTaskStore();
+    delete store.byId[id];
+    store.localOnlyIds = store.localOnlyIds.filter((x) => x !== id);
+    if (!store.deletedIds.includes(id)) store.deletedIds.push(id);
+    saveTaskStore(store);
+}
+
 // DummyJSON 형식 → 우리 Task 형식으로 변환
-// index를 넘기면 목록용으로 제목/작성자/담당자/날짜를 커스텀 값으로 채움 (서버에 없음)
-function mapDummyTodoToTask(d: DummyTodo, index?: number): Task {
+// list / view / edit 모두 같은 규칙 적용 → 화면 값 일치
+// DummyJSON은 todo/userId만 신뢰 가능한 저장값이므로, title은 todo를 그대로 사용
+function mapDummyTodoToTask(d: DummyTodo): Task {
     const status: TaskStatus = d.completed ? "done" : "request";
-    const userId = String(d.userId);
-    const title = index !== undefined ? `제목${index + 1}` : d.todo; // 커스텀 (서버에 title 없음)
-    const authorId = index !== undefined ? `작성자${index + 1}` : userId; // 커스텀 (목록용 1,2,3,4)
-    const assigneeId = index !== undefined ? `담당자${index + 1}` : userId; // 커스텀 (목록용 1,2,3,4)
+    const title = d.todo;
+    // 작성자/담당자는 서버에 별도 필드가 없어서 userId 기반으로 커스텀 표시
+    const authorId = `작성자${d.userId}`;
+    const assigneeId = `담당자${d.userId}`;
     const createdDay = today(); // 커스텀 (서버에 없음, 오늘 날짜)
     return {
         id: String(d.id),
@@ -44,10 +93,12 @@ function mapDummyTodoToTask(d: DummyTodo, index?: number): Task {
 
 // 우리 Task → DummyJSON 요청 body 형식 (create/update용)
 function mapTaskToDummyBody(task: { title: string; status?: TaskStatus; authorId?: string }) {
+    const authorDigits = (task.authorId ?? "").match(/\d+/)?.[0];
     return {
         todo: task.title,
         completed: task.status === "done",
-        userId: parseInt(task.authorId || "1", 10) || 1,
+        // authorId가 "3" 또는 "작성자3" 형태여도 userId로 변환
+        userId: parseInt(authorDigits ?? task.authorId ?? "1", 10) || 1,
     };
 }
 
@@ -74,13 +125,27 @@ export async function getTasks(limit = 30, skip = 0): Promise<Task[]> {
     const data = await request<DummyTodosResponse>(
         `/todos?limit=${limit}&skip=${skip}`
     );
-    return data.todos.map((d, i) => mapDummyTodoToTask(d, i));
+    const store = loadTaskStore();
+    const base = data.todos.map((d) => mapDummyTodoToTask(d));
+    const merged = base
+        .filter((t) => !store.deletedIds.includes(t.id))
+        .map((t) => store.byId[t.id] ?? t);
+
+    // 로컬에서 만든 업무(localOnly)도 목록에 보여주기
+    const localOnly = store.localOnlyIds
+        .map((id) => store.byId[id])
+        .filter(Boolean);
+    return [...localOnly, ...merged];
 }
 
 export async function getTaskById(id: string): Promise<Task | null> {
+    const store = loadTaskStore();
+    if (store.deletedIds.includes(id)) return null;
+    if (store.byId[id]) return store.byId[id];
     try {
         const d = await request<DummyTodo>(`/todos/${id}`);
-        return mapDummyTodoToTask(d);
+        const base = mapDummyTodoToTask(d);
+        return store.byId[id] ?? base;
     } catch {
         return null;
     }
@@ -94,27 +159,67 @@ export async function createTask(
         method: "POST",
         body,
     });
-    return mapDummyTodoToTask(d);
+    // 서버 응답은 영구 저장이 안 되므로, 우리가 입력한 값으로 로컬 저장까지 한다.
+    const created: Task = {
+        ...mapDummyTodoToTask(d),
+        title: task.title,
+        description: task.description ?? task.title,
+        status: task.status ?? (d.completed ? "done" : "request"),
+        authorId: task.authorId ?? `작성자${d.userId}`,
+        assigneeId: task.assigneeId ?? `담당자${d.userId}`,
+        createdDay: task.createdDay ?? today(),
+        doneDay: task.doneDay,
+        importStatus: task.importStatus ?? "medium",
+    };
+    upsertLocalTask(created, { localOnly: true });
+    return created;
 }
 
 export async function updateTask(
     id: string,
-    data: Partial<Pick<Task, "title" | "status">>
+    data: Partial<
+        Pick<
+            Task,
+            | "title"
+            | "status"
+            | "authorId"
+            | "assigneeId"
+            | "description"
+            | "createdDay"
+            | "doneDay"
+            | "importStatus"
+        >
+    >
 ): Promise<Task> {
     const body = mapTaskToDummyBody({
         title: data.title ?? "",
         status: data.status,
-        authorId: "1",
+        authorId: data.authorId ?? "1",
     });
     const d = await request<DummyTodo>(`/todos/${id}`, {
         method: "PUT",
         body,
     });
-    return mapDummyTodoToTask(d);
+    const base = mapDummyTodoToTask(d);
+    const next: Task = {
+        ...base,
+        id,
+        ...(data.title !== undefined ? { title: data.title } : null),
+        ...(data.status !== undefined ? { status: data.status } : null),
+        ...(data.description !== undefined ? { description: data.description } : null),
+        ...(data.createdDay !== undefined ? { createdDay: data.createdDay } : null),
+        ...(data.doneDay !== undefined ? { doneDay: data.doneDay } : null),
+        ...(data.importStatus !== undefined ? { importStatus: data.importStatus } : null),
+        ...(data.authorId !== undefined ? { authorId: data.authorId } : null),
+        ...(data.assigneeId !== undefined ? { assigneeId: data.assigneeId } : null),
+    };
+    upsertLocalTask(next);
+    return next;
 }
 
 export async function deleteTask(id: string): Promise<void> {
     await request<{ id: number; isDeleted: boolean }>(`/todos/${id}`, {
         method: "DELETE",
     });
+    markDeleted(id);
 }

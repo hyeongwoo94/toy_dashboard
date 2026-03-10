@@ -49,7 +49,7 @@ function TaskView() {
     return (
         <>
             <div className="task_view_top_btn_layout">
-                <CommonBtn text="뒤로가기" btnClass="-cancel" onClick={() => navigate(-1)} />
+                <CommonBtn text="수정하기" btnClass="-cancel" onClick={() => id && navigate(`/task/edit/${id}`)} />
                 <CommonBtn text="목록" onClick={() => navigate("/task")} />
             </div>
             <div className="task_edit">
