@@ -1,6 +1,9 @@
 import CommonBtn from "../../components/CommonBtn";
 import Pagenation from "../common/Pagenation";
 import TaskTable from "./components/TaskTable";
+import Loading from "../common/loading";
+import { useTasks } from "./features/useTasks";
+import type { Task } from "../../features/task/task";
 
 const columns = [
     { label: "번호", width: "7%" },
@@ -12,61 +15,41 @@ const columns = [
     { label: "상태", width: "10%" },
 ];
 
-const rows = [
-    {
-        to: "/",
+const statusLabel: Record<string, string> = {
+    request: "요청",
+    "in-progress": "진행",
+    review: "검토",
+    done: "완료",
+};
+
+function taskToRow(task: Task, index: number) {
+    const desc = task.description ?? "";
+    const preview = desc.length > 50 ? `${desc.slice(0, 50)}...` : desc;
+    return {
+        to: `/task/view/${task.id}`,
         cells: [
-            "1",
-            "첫 번째 제목첫 ",
-            "내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기",
-            "홍길동",
-            "박일꾼",
-            "2025-03-01",
-            "완료",
+            String(index + 1),
+            task.title,
+            preview,
+            task.authorId,
+            task.assigneeId,
+            task.createdDay || "-",
+            statusLabel[task.status ?? "request"] ?? task.status ?? "-",
         ],
-    },
-    {
-        to: "/",
-        cells: [
-            "2",
-            "두 번째 제목",
-            "내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기",
-            "김철수",
-            "박일꾼",
-            "2025-03-02",
-            "진행중",
-        ],
-    },
-    {
-        to: "/",
-        cells: [
-            "3",
-            "세 번째 제목",
-            "내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기",
-            "이영희",
-            "박일꾼",
-            "2025-03-03",
-            "대기",
-        ],
-    },
-    {
-        to: "/",
-        cells: [
-            "4",
-            "네 번째 제목",
-            "내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기내용미리보기",
-            "박민수",
-            "박일꾼",
-            "2025-03-04",
-            "완료",
-        ],
-    },
-];
+    };
+}
 
 function TaskList() {
+    const { tasks, isLoading } = useTasks();
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    const rows = tasks.map((task, i) => taskToRow(task, i));
+
     return (
         <>
-            {/* 탭은 on으로 관리? */}
             <div className="tab_btn_layout">
                 <div className="_btn on">
                     <CommonBtn text="전체" />

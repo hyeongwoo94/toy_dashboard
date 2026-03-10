@@ -18,19 +18,27 @@ interface DummyTodosResponse {
     limit: number;
 }
 
+// 오늘 날짜 YYYY-MM-DD (커스텀용)
+const today = () => new Date().toISOString().slice(0, 10);
+
 // DummyJSON 형식 → 우리 Task 형식으로 변환
-function mapDummyTodoToTask(d: DummyTodo): Task {
-    const status: TaskStatus = d.completed ? "done" : "todo";
+// index를 넘기면 목록용으로 제목/작성자/담당자/날짜를 커스텀 값으로 채움 (서버에 없음)
+function mapDummyTodoToTask(d: DummyTodo, index?: number): Task {
+    const status: TaskStatus = d.completed ? "done" : "request";
     const userId = String(d.userId);
+    const title = index !== undefined ? `제목${index + 1}` : d.todo; // 커스텀 (서버에 title 없음)
+    const authorId = index !== undefined ? `작성자${index + 1}` : userId; // 커스텀 (목록용 1,2,3,4)
+    const assigneeId = index !== undefined ? `담당자${index + 1}` : userId; // 커스텀 (목록용 1,2,3,4)
+    const createdDay = today(); // 커스텀 (서버에 없음, 오늘 날짜)
     return {
         id: String(d.id),
-        title: d.todo,
-        createdDay: "", // DummyJSON에 없음
+        title,
+        createdDay,
         description: d.todo,
         status,
         importStatus: "medium",
-        authorId: userId,
-        assigneeId: userId,
+        authorId,
+        assigneeId,
     };
 }
 
@@ -66,7 +74,7 @@ export async function getTasks(limit = 30, skip = 0): Promise<Task[]> {
     const data = await request<DummyTodosResponse>(
         `/todos?limit=${limit}&skip=${skip}`
     );
-    return data.todos.map(mapDummyTodoToTask);
+    return data.todos.map((d, i) => mapDummyTodoToTask(d, i));
 }
 
 export async function getTaskById(id: string): Promise<Task | null> {

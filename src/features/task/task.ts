@@ -1,4 +1,4 @@
-export type TaskStatus = 'todo' | 'in-progress' | 'done'
+export type TaskStatus = 'request' | 'in-progress' | 'review' | 'done'
 export type TaskImportStatus = 'low' | 'medium' | 'high'
 
 export interface Task {

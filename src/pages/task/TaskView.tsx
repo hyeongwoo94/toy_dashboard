@@ -10,9 +10,9 @@ function TaskView() {
     const [importance, setImportance] = useState("low");
     const stateList = [
         { value: "request", label: "요청" },
-        { value: "prgress", label: "진행" },
+        { value: "in-progress", label: "진행" },
         { value: "review", label: "검토" },
-        { value: "complete", label: "완료" },
+        { value: "done", label: "완료" },
     ];
     const importanceList = [
         { value: "low", label: "낮음" },

@@ -6,9 +6,9 @@ import Index from "./pages/index";
 import LoginPage from "./pages/login/LoginPage";
 import NotFound from "./pages/error/NotFound";
 import SubPageLayout from "./pages/common/SubPageLayout";
-import TaskList from "./pages/tesk/TaskList";
-import TaskEdit from "./pages/tesk/TaskEdit";
-import TaskView from "./pages/tesk/TaskView";
+import TaskList from "./pages/task/TaskList";
+import TaskEdit from "./pages/task/TaskEdit";
+import TaskView from "./pages/task/TaskView";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
