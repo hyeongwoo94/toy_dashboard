@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import TaskDate from "./components/TaskDate";
 import TaskInput from "./components/TaskInput";
 import TaskState from "./components/TaskState";
@@ -11,6 +11,7 @@ import type { Task } from "../../features/task/task";
 
 function TaskView() {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [task, setTask] = useState<Task | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState("request");
@@ -48,8 +49,8 @@ function TaskView() {
     return (
         <>
             <div className="task_view_top_btn_layout">
-                <CommonBtn text="뒤로가기" btnClass="-cancel"/>
-                <CommonBtn text="목록" />
+                <CommonBtn text="뒤로가기" btnClass="-cancel" onClick={() => navigate(-1)} />
+                <CommonBtn text="목록" onClick={() => navigate("/task")} />
             </div>
             <div className="task_edit">
                 <div className="task_edit_wrap">

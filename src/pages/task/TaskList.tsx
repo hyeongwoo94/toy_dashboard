@@ -4,6 +4,7 @@ import TaskTable from "./components/TaskTable";
 import Loading from "../common/loading";
 import { useTasks } from "./features/useTasks";
 import type { Task } from "../../features/task/task";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
     { label: "번호", width: "7%" },
@@ -40,6 +41,7 @@ function taskToRow(task: Task, index: number) {
 }
 
 function TaskList() {
+    const navigate = useNavigate();
     const { tasks, isLoading } = useTasks();
 
     if (isLoading) {
@@ -50,13 +52,16 @@ function TaskList() {
 
     return (
         <>
-            <div className="tab_btn_layout">
-                <div className="_btn on">
-                    <CommonBtn text="전체" />
+            <div className="task_list_top">
+                <div className="tab_btn_layout">
+                    <div className="_btn on">
+                        <CommonBtn text="전체" />
+                    </div>
+                    <div className="_btn">
+                        <CommonBtn text="내 업무" />
+                    </div>
                 </div>
-                <div className="_btn">
-                    <CommonBtn text="내 업무" />
-                </div>
+                <CommonBtn btnClass="add_task_btn" text="업무 등록" onClick={() => navigate("/task/edit")} />
             </div>
             <TaskTable
                 columns={columns}
