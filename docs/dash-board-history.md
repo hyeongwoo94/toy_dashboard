@@ -94,6 +94,10 @@ Dashboard 뼈대 UI
 ㄴ 공통리스트제작: 어떻게 제작했는지 블로그에 작성하기
 
 API 모듈 작성
+ㄴ useTasks 1차 구현 (fetch + loading)	← 지금
+ㄴ TaskList 연결	
+ㄴ CRUD 붙이기	
+ㄴ 필터/정렬, 페이지네이션, 문서화	
 
 Task 타입 설계
 
