@@ -8,6 +8,7 @@ import TaskTextarea from "./components/TaskTextarea";
 import Loading from "../common/loading";
 import { getTaskById, createTask, updateTask } from "../../features/task/api";
 import type { Task } from "../../features/task/task";
+import { useModalStore } from "../../features/Common/modalStore";
 
 function TaskEdit() {
     const { id } = useParams<{ id: string }>();
@@ -55,6 +56,8 @@ function TaskEdit() {
         { value: "high", label: "높음" },
     ];
 
+    const openModal = useModalStore((s) => s.open);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const payload = {
@@ -67,11 +70,18 @@ function TaskEdit() {
             authorId: authorId || "1",
             assigneeId: assigneeId || "1",
         };
-        if (id) {
-            updateTask(id, payload).then(() => navigate(`/task/view/${id}`));
-        } else {
-            createTask(payload).then((created) => navigate(`/task/view/${created.id}`));
-        }
+        openModal({
+            content: id ? "수정 내용을 저장하시겠습니까?" : "업무를 등록하시겠습니까?",
+            onConfirmText: "저장",
+            onCancelText: "취소",
+            onConfirm: () => {
+                if (id) {
+                    updateTask(id, payload).then(() => navigate(`/task/view/${id}`));
+                } else {
+                    createTask(payload).then((created) => navigate(`/task/view/${created.id}`));
+                }
+            },
+        });
     };
 
     if (isLoading) return <Loading />;
@@ -87,30 +97,8 @@ function TaskEdit() {
                                 <div className="_item_w_50">
                                     <TaskInput
                                         type="text"
-                                        label="제목"
-                                        placeholder="제목 입력"
-                                        errorMsg="필수값입니다."
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                </div>
-                                <div className="_item_w_50">
-                                    <TaskInput
-                                        type="text"
                                         label="작성자"
                                         placeholder="작성자 입력"
-                                        value={authorId}
-                                        onChange={(e) => setAuthorId(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="_item_flex">
-                                <div className="_item_w_50">
-                                    <TaskInput
-                                        type="text"
-                                        label="팀이름"
-                                        placeholder="팀이름 입력"
-                                        errorMsg="필수값입니다."
                                         value={authorId}
                                         onChange={(e) => setAuthorId(e.target.value)}
                                     />
@@ -152,6 +140,18 @@ function TaskEdit() {
                                         states={stateList}
                                         currentStatus={status ?? "request"}
                                         onChange={(value) => setStatus(value as Task["status"])}
+                                    />
+                                </div>
+                            </div>
+                            <div className="_item_flex">
+                                <div className="_item_w_100">
+                                    <TaskInput
+                                        type="text"
+                                        label="제목"
+                                        placeholder="제목 입력"
+                                        errorMsg="필수값입니다."
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
                                     />
                                 </div>
                             </div>

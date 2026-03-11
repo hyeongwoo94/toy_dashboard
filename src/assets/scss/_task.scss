@@ -38,12 +38,27 @@
             &._full_height_item {
                 flex: 1;
             }
+            @media (max-width: 768px) {
+                flex-direction: column;
+                &._full_height_item {
+                   flex-direction: row;
+                }
+            }
         }
         ._item_w_50 {
             display: flex;
             align-items: center;
             gap: 1rem;
             width: 50%;
+            @media (max-width: 768px) {
+                width: 100%;
+            }
+        }
+        ._item_w_100 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
         }
         .common_input {
             width: 100%;
@@ -61,7 +76,7 @@
             font-size: var(--font-size-base);
             color: var(--color-text);
             font-weight: 600;
-            min-width: 6rem;
+            min-width: 4rem;
         }
     }
 }

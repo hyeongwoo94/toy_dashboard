@@ -4,7 +4,8 @@ import TaskDate from "./components/TaskDate";
 import TaskInput from "./components/TaskInput";
 import TaskState from "./components/TaskState";
 import CommonBtn from "../../components/CommonBtn";
-import { getTaskById, updateTask } from "../../features/task/api";
+import { getTaskById, updateTask, deleteTask } from "../../features/task/api";
+import { useModalStore } from "../../features/Common/modalStore";
 import TaskTextarea from "./components/TaskTextarea";
 import Loading from "../common/loading";
 import type { Task } from "../../features/task/task";
@@ -43,6 +44,20 @@ function TaskView() {
         { value: "high", label: "높음" },
     ];
 
+    const openModal = useModalStore((s) => s.open);
+
+    const handleDelete = () => {
+        if (!id) return;
+        openModal({
+            content: "정말 삭제하겠습니까?",
+            onConfirmText: "삭제",
+            onCancelText: "취소",
+            onConfirm: () => {
+                deleteTask(id).then(() => navigate("/task"));
+            },
+        });
+    };
+
     if (isLoading) return <Loading />;
     if (!id || !task) return <p className="_view_text">해당 업무를 찾을 수 없습니다.</p>;
 
@@ -51,6 +66,7 @@ function TaskView() {
             <div className="task_view_top_btn_layout">
                 <CommonBtn text="수정하기" btnClass="-cancel" onClick={() => id && navigate(`/task/edit/${id}`)} />
                 <CommonBtn text="목록" onClick={() => navigate("/task")} />
+                <CommonBtn text="삭제하기" btnClass="-cancel" onClick={handleDelete} />
             </div>
             <div className="task_edit">
                 <div className="task_edit_wrap">
@@ -61,30 +77,8 @@ function TaskView() {
                                     <TaskInput
                                         mode="view"
                                         type="text"
-                                        label="제목"
-                                        placeholder="제목 입력"
-                                        errorMsg="필수값입니다."
-                                        value={task.title}
-                                    />
-                                </div>
-                                <div className="_item_w_50">
-                                    <TaskInput
-                                        mode="view"
-                                        type="text"
                                         label="작성자"
                                         placeholder="제목 입력"
-                                        value={task.authorId}
-                                    />
-                                </div>
-                            </div>
-                            <div className="_item_flex">
-                                <div className="_item_w_50">
-                                    <TaskInput
-                                        mode="view"
-                                        type="text"
-                                        label="팀이름"
-                                        placeholder="제목 입력"
-                                        errorMsg="필수값입니다."
                                         value={task.authorId}
                                     />
                                 </div>
@@ -131,6 +125,18 @@ function TaskView() {
                                                 setStatus(status);
                                             });
                                         }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="_item_flex">
+                                <div className="_item_w_100">
+                                    <TaskInput
+                                        mode="view"
+                                        type="text"
+                                        label="제목"
+                                        placeholder="제목 입력"
+                                        errorMsg="필수값입니다."
+                                        value={task.title}
                                     />
                                 </div>
                             </div>

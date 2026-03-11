@@ -12,6 +12,7 @@
 | 260307 | TaskState 컴포넌트화 상태/우선순위 색상 적용,Taskinput 제작 view/edit에서 보여지는 상태 둘다 생각해서 제작, CommonList 분석 |
 | 260309 | 라이브러리 설치: react-calendar, react-datepicker |
 | 260310 | Task API 연동: TaskList 데이터 연결, TaskView/TaskEdit 라우팅 분리, create/update/delete 붙이기, DummyJSON 비영구 이슈를 localStorage merge로 해결, list/view/edit 데이터 불일치 정리 |
+| 260311 | 전역 모달: modalStore + CommonModal (Route 없이 App에 1회 렌더, 필요 시 open()), 저장/삭제 2차 확인 모달 적용, 모달 버튼 문구 onConfirmText/onCancelText 옵션, TaskView 삭제하기 + 확인 후 deleteTask·목록 이동 |
 
 ---
 
