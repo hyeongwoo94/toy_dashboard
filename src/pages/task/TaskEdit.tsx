@@ -23,8 +23,12 @@ function TaskEdit() {
     const [status, setStatus] = useState<Task["status"]>("request");
     const [importance, setImportance] = useState<Task["importStatus"]>("low");
 
+    // 등록 모드: 작성일은 오늘로 고정(readonly)
+    const today = () => new Date().toISOString().slice(0, 10);
+
     useEffect(() => {
         if (!id) {
+            setCreatedDay(today());
             setIsLoading(false);
             return;
         }
@@ -115,10 +119,10 @@ function TaskEdit() {
                             </div>
                             <div className="_item_flex">
                                 <div className="_item_w_50">
-                                    <TaskDate label="작성일" value={createdDay} />
+                                    <TaskDate mode="view" label="작성일" value={createdDay} />
                                 </div>
                                 <div className="_item_w_50">
-                                    <TaskDate label="마감일" value={doneDay} />
+                                    <TaskDate label="마감일" value={doneDay} onChange={(v) => setDoneDay(v)} />
                                 </div>
                             </div>
                             <div className="_item_flex">

@@ -83,6 +83,7 @@ function mapDummyTodoToTask(d: DummyTodo): Task {
         id: String(d.id),
         title,
         createdDay,
+        doneDay: "", // 서버에 없음, view에서 빈 값이면 "-"로 표시
         description: d.todo,
         status,
         importStatus: "medium",
@@ -160,6 +161,9 @@ export async function createTask(
         body,
     });
     // 서버 응답은 영구 저장이 안 되므로, 우리가 입력한 값으로 로컬 저장까지 한다.
+    // createdDay/doneDay: 빈 문자열 ""도 ?? 로는 그대로 남으므로, 비어 있으면 작성일은 오늘로
+    const createdDay = task.createdDay?.trim() ? task.createdDay : today();
+    const doneDay = task.doneDay?.trim() ? task.doneDay : "";
     const created: Task = {
         ...mapDummyTodoToTask(d),
         title: task.title,
@@ -167,8 +171,8 @@ export async function createTask(
         status: task.status ?? (d.completed ? "done" : "request"),
         authorId: task.authorId ?? `작성자${d.userId}`,
         assigneeId: task.assigneeId ?? `담당자${d.userId}`,
-        createdDay: task.createdDay ?? today(),
-        doneDay: task.doneDay,
+        createdDay,
+        doneDay,
         importStatus: task.importStatus ?? "medium",
     };
     upsertLocalTask(created, { localOnly: true });
@@ -201,14 +205,17 @@ export async function updateTask(
         body,
     });
     const base = mapDummyTodoToTask(d);
+    // 수정 시에도 작성일/마감일이 비어 있으면 base 값 유지, 넘어온 값이 있으면 사용
+    const createdDay = data.createdDay?.trim() ? data.createdDay : base.createdDay;
+    const doneDay = data.doneDay !== undefined ? (data.doneDay?.trim() ? data.doneDay : "") : base.doneDay ?? "";
     const next: Task = {
         ...base,
         id,
         ...(data.title !== undefined ? { title: data.title } : null),
         ...(data.status !== undefined ? { status: data.status } : null),
         ...(data.description !== undefined ? { description: data.description } : null),
-        ...(data.createdDay !== undefined ? { createdDay: data.createdDay } : null),
-        ...(data.doneDay !== undefined ? { doneDay: data.doneDay } : null),
+        createdDay,
+        doneDay,
         ...(data.importStatus !== undefined ? { importStatus: data.importStatus } : null),
         ...(data.authorId !== undefined ? { authorId: data.authorId } : null),
         ...(data.assigneeId !== undefined ? { assigneeId: data.assigneeId } : null),

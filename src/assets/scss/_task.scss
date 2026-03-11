@@ -76,7 +76,10 @@
             font-size: var(--font-size-base);
             color: var(--color-text);
             font-weight: 600;
-            min-width: 4rem;
+            min-width: 6rem;
+            @media (max-width: 1280px) {
+                min-width: 4rem;
+            }
         }
     }
 }

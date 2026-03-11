@@ -184,6 +184,22 @@
     .react-datepicker-wrapper{
         width: 100%;
     }
+    .react-datepicker__header{
+        background-color: var(--color-accent);
+        padding: 0;      
+    }
+    .react-datepicker__current-month{
+        padding: 0.8rem;
+        box-sizing: border-box;
+        font-size: var(--font-size-base);
+        color: var(--color-text-w);
+    }
+    .react-datepicker__navigation-icon::before, .react-datepicker__year-read-view--down-arrow, .react-datepicker__month-read-view--down-arrow, .react-datepicker__month-year-read-view--down-arrow{
+        border-color: var(--color-text-w);
+    }
+    .react-datepicker{
+        font-size: var(--font-size-base);
+    }
 }
 .common_textarea {
     background-color: var(--color-bg-w);
@@ -322,7 +338,7 @@
     height: 100%;
     z-index: 99;
     ._modal_bg{
-        background-color: #333;
+        background-color: #33333323;
         display: flex;
         flex-direction: column;
         justify-content: center;

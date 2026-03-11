@@ -13,6 +13,7 @@
 | 260309 | 라이브러리 설치: react-calendar, react-datepicker |
 | 260310 | Task API 연동: TaskList 데이터 연결, TaskView/TaskEdit 라우팅 분리, create/update/delete 붙이기, DummyJSON 비영구 이슈를 localStorage merge로 해결, list/view/edit 데이터 불일치 정리 |
 | 260311 | 전역 모달: modalStore + CommonModal (Route 없이 App에 1회 렌더, 필요 시 open()), 저장/삭제 2차 확인 모달 적용, 모달 버튼 문구 onConfirmText/onCancelText 옵션, TaskView 삭제하기 + 확인 후 deleteTask·목록 이동 |
+| 260312 | View 작성일/마감일 표시 보정(api에 doneDay 추가, TaskDate value 빈값 처리). create/update 시 createdDay·doneDay 저장 보정(빈 문자열이면 작성일 오늘·마감일 유지). CommonDatePicker value/onChange 연동(마감일 입력 가능). 작성일 readonly + 등록 시 오늘 날짜 자동. View 상태 버튼 클릭 시 자동저장(updateTask 후 task state 동기화). CommonDatePicker 커스텀(placeholder, minDate, maxDate, dateFormat, disabled). DummyJSON GET /todos/:id 404 원인 정리(데모 API 비영구 저장) |
 
 ---
 
