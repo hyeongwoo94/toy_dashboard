@@ -4,7 +4,8 @@ import TaskTable from "./components/TaskTable";
 import Loading from "../common/loading";
 import { useTasks } from "./features/useTasks";
 import type { Task } from "../../features/task/task";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../features/auth/authStore";
 
 const columns = [
     { label: "번호", width: "7%" },
@@ -42,23 +43,42 @@ function taskToRow(task: Task, index: number) {
 
 function TaskList() {
     const navigate = useNavigate();
+    const location = useLocation();
+    // 로그인된 사용자 이름 (담당자와 비교할 기준)
+    const name = useAuthStore((state) => state.name);
+    // URL 쿼리(tab)로부터 현재 탭 상태 계산: 기본값은 전체(all)
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get("tab");
+    const tab: "all" | "mine" = tabParam === "mine" ? "mine" : "all";
     const { tasks, isLoading } = useTasks();
 
     if (isLoading) {
         return <Loading />;
     }
 
-    const rows = tasks.map((task, i) => taskToRow(task, i));
+    // 탭과 로그인 이름에 따라 화면에 보여줄 업무 목록 필터링
+    const visibleTasks =
+        tab === "all" || !name
+            ? tasks
+            : tasks.filter((task) => task.assigneeId === name);
+
+    const rows = visibleTasks.map((task, i) => taskToRow(task, i));
 
     return (
         <>
             <div className="task_list_top">
                 <div className="tab_btn_layout">
-                    <div className="_btn on">
-                        <CommonBtn text="전체" />
+                    <div className={`_btn ${tab === "all" ? "on" : ""}`}>
+                        <CommonBtn
+                            text="전체"
+                            onClick={() => navigate("/task")}
+                        />
                     </div>
-                    <div className="_btn">
-                        <CommonBtn text="내 업무" />
+                    <div className={`_btn ${tab === "mine" ? "on" : ""}`}>
+                        <CommonBtn
+                            text="내 업무"
+                            onClick={() => navigate("/task?tab=mine")}
+                        />
                     </div>
                 </div>
                 <CommonBtn btnClass="add_task_btn" text="업무 등록" onClick={() => navigate("/task/edit")} />

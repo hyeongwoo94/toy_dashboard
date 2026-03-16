@@ -17,7 +17,7 @@ interface CommonListProps {
     columns: CommonListColumn[];
     /** 바디 행 데이터. 각 row.cells 개수는 columns 개수와 같아야 함 */
     rows: CommonListRow[];
-    emptyMsg: string
+    emptyMsg: string;
 }
 
 function CommonList(props: CommonListProps) {
@@ -26,6 +26,16 @@ function CommonList(props: CommonListProps) {
 
     const cellStyle = (width?: string) =>
         width ? { flex: `0 0 ${width}` as const, minWidth: width } : undefined;
+
+    // 상태 텍스트에 따라 클래스명 반환 (완료/진행/요청 등)
+    const getStatusClass = (text: React.ReactNode) => {
+        if (typeof text !== "string") return "";
+        if (text === "완료") return "done";
+        if (text === "진행" || text === "진행중") return "in-progress";
+        if (text === "요청") return "request";
+        if (text === "검토") return "review";
+        return "";
+    };
 
     return (
         <div className="common_list">
@@ -46,7 +56,11 @@ function CommonList(props: CommonListProps) {
                         const content = columns.map((col, ci) => (
                             <div
                                 key={ci}
-                                className="_item_td"
+                                className={`_item_td ${
+                                    col.label === "상태"
+                                        ? getStatusClass(row.cells?.[ci])
+                                        : ""
+                                }`}
                                 style={cellStyle(col.width)}
                             >
                                 {row.cells?.[ci]}
@@ -55,7 +69,10 @@ function CommonList(props: CommonListProps) {
                         return (
                             <li key={ri} className="_body_item">
                                 {row.to ? (
-                                    <Link to={row.to} className="_body_item_link">
+                                    <Link
+                                        to={row.to}
+                                        className="_body_item_link"
+                                    >
                                         {content}
                                     </Link>
                                 ) : (
@@ -68,7 +85,13 @@ function CommonList(props: CommonListProps) {
                     })}
                     {rows.length === 0 && (
                         <li className="_body_item">
-                            <div className="_body_item_link" style={{ justifyContent: "center", padding: "1rem" }}>
+                            <div
+                                className="_body_item_link"
+                                style={{
+                                    justifyContent: "center",
+                                    padding: "1rem",
+                                }}
+                            >
                                 데이터가 없습니다.
                             </div>
                         </li>

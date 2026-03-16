@@ -121,7 +121,13 @@ function TaskView() {
                                         onChange={(value) => {
                                             if (!id) return;
                                             setStatus(value);
-                                            updateTask(id, { status: value as "request" | "in-progress" | "review" | "done" }).catch(() => {
+                                            updateTask(id, {
+                                                status: value as
+                                                    | "request"
+                                                    | "in-progress"
+                                                    | "review"
+                                                    | "done",
+                                            }).catch(() => {
                                                 setStatus(status);
                                             });
                                         }}
