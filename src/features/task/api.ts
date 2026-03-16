@@ -224,6 +224,16 @@ export async function updateTask(
     return next;
 }
 
+// API 필드에는 없지만 클라이언트에서만 관리하는 상태(status)만
+// 로컬스토어에 바로 반영하고 싶을 때 사용하는 헬퍼
+export function updateTaskStatusLocal(id: string, status: TaskStatus): void {
+    const store = loadTaskStore();
+    const existing = store.byId[id];
+    if (!existing) return;
+    const next: Task = { ...existing, status };
+    upsertLocalTask(next);
+}
+
 export async function deleteTask(id: string): Promise<void> {
     await request<{ id: number; isDeleted: boolean }>(`/todos/${id}`, {
         method: "DELETE",

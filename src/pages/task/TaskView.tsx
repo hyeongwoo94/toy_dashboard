@@ -4,11 +4,12 @@ import TaskDate from "./components/TaskDate";
 import TaskInput from "./components/TaskInput";
 import TaskState from "./components/TaskState";
 import CommonBtn from "../../components/CommonBtn";
-import { getTaskById, updateTask, deleteTask } from "../../features/task/api";
+import { getTaskById, updateTaskStatusLocal, deleteTask } from "../../features/task/api";
 import { useModalStore } from "../../features/Common/modalStore";
 import TaskTextarea from "./components/TaskTextarea";
 import Loading from "../common/loading";
 import type { Task } from "../../features/task/task";
+import { useAuthStore } from "../../features/auth/authStore";
 
 function TaskView() {
     const { id } = useParams<{ id: string }>();
@@ -16,12 +17,12 @@ function TaskView() {
     const [task, setTask] = useState<Task | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState("request");
+    // 현재 로그인한 사용자 이름과 역할 (각각 별도로 구독해서 스냅샷 경고 방지)
+    const name = useAuthStore((state) => state.name);
+    const role = useAuthStore((state) => state.role);
 
     useEffect(() => {
-        if (!id) {
-            setIsLoading(false);
-            return;
-        }
+        if (!id) return;
         getTaskById(id)
             .then((data) => {
                 setTask(data);
@@ -61,12 +62,37 @@ function TaskView() {
     if (isLoading) return <Loading />;
     if (!id || !task) return <p className="_view_text">해당 업무를 찾을 수 없습니다.</p>;
 
+    // 상태 변경 가능 조건:
+    // 1) 관리자(admin) 이거나
+    // 2) 이 업무의 담당자 이름과 로그인한 이름이 같은 경우
+    const canChangeStatus =
+        role === "admin" || (name != null && task.assigneeId === name);
+
+    // 수정 / 삭제 버튼을 볼 수 있는 조건:
+    // 1) 관리자(admin)이거나
+    // 2) 현재 로그인한 이름이 작성자이거나 담당자인 경우
+    const canEditOrDelete =
+        role === "admin" ||
+        (name != null && (task.authorId === name || task.assigneeId === name));
+
     return (
         <>
             <div className="task_view_top_btn_layout">
-                <CommonBtn text="수정하기" btnClass="-cancel" onClick={() => id && navigate(`/task/edit/${id}`)} />
+                {canEditOrDelete && (
+                    <>
+                        <CommonBtn
+                            text="수정하기"
+                            btnClass="-cancel"
+                            onClick={() => id && navigate(`/task/edit/${id}`)}
+                        />
+                        <CommonBtn
+                            text="삭제하기"
+                            btnClass="-cancel"
+                            onClick={handleDelete}
+                        />
+                    </>
+                )}
                 <CommonBtn text="목록" onClick={() => navigate("/task")} />
-                <CommonBtn text="삭제하기" btnClass="-cancel" onClick={handleDelete} />
             </div>
             <div className="task_edit">
                 <div className="task_edit_wrap">
@@ -118,18 +144,21 @@ function TaskView() {
                                     <TaskState
                                         states={stateList}
                                         currentStatus={status}
+                                        readOnly={!canChangeStatus}
                                         onChange={(value) => {
-                                            if (!id) return;
+                                            // 권한이 없으면 상태 변경 불가
+                                            if (!id || !canChangeStatus) return;
+                                            // 1) 먼저 UI 상태 변경
                                             setStatus(value);
-                                            updateTask(id, {
-                                                status: value as
+                                            // 2) API에는 없는 status 필드를 클라이언트 로컬스토어에만 저장
+                                            updateTaskStatusLocal(
+                                                id,
+                                                value as
                                                     | "request"
                                                     | "in-progress"
                                                     | "review"
-                                                    | "done",
-                                            }).catch(() => {
-                                                setStatus(status);
-                                            });
+                                                    | "done"
+                                            );
                                         }}
                                     />
                                 </div>

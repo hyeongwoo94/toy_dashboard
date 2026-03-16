@@ -14,6 +14,7 @@
 | 260310 | Task API 연동: TaskList 데이터 연결, TaskView/TaskEdit 라우팅 분리, create/update/delete 붙이기, DummyJSON 비영구 이슈를 localStorage merge로 해결, list/view/edit 데이터 불일치 정리 |
 | 260311 | 전역 모달: modalStore + CommonModal (Route 없이 App에 1회 렌더, 필요 시 open()), 저장/삭제 2차 확인 모달 적용, 모달 버튼 문구 onConfirmText/onCancelText 옵션, TaskView 삭제하기 + 확인 후 deleteTask·목록 이동 |
 | 260312 | View 작성일/마감일 표시 보정(api에 doneDay 추가, TaskDate value 빈값 처리). create/update 시 createdDay·doneDay 저장 보정(빈 문자열이면 작성일 오늘·마감일 유지). CommonDatePicker value/onChange 연동(마감일 입력 가능). 작성일 readonly + 등록 시 오늘 날짜 자동. View 상태 버튼 클릭 시 자동저장(updateTask 후 task state 동기화). CommonDatePicker 커스텀(placeholder, minDate, maxDate, dateFormat, disabled). DummyJSON GET /todos/:id 404 원인 정리(데모 API 비영구 저장) |
+| 260313 | 로그인 목데이터 및 유효성 검사(아이디/비밀번호 빈 값·불일치 처리), form 기반 로그인(엔터 입력 지원), authStore를 name/role 중심으로 재설계. TaskList 탭(전체/내 업무) + URL 쿼리(/task?tab=mine)로 초기 탭 제어, 메인 대시보드(MainList = 전체, MyWorkList = 내 업무)와 연동. TaskView 권한 로직(관리자/담당자만 상태 변경 + 수정/삭제 버튼 표시), status를 DummyJSON API가 아닌 localStorage TaskStore에만 저장하는 로컬 전용 업데이트(updateTaskStatusLocal)로 변경. TaskEdit 신규 등록 시 작성자에 현재 로그인 이름을 기본값으로 설정. CommonList 상태 컬럼에 상태별 클래스(status-request/progress/review/done) 부여해 스타일링 기반 준비. |
 
 ---
 

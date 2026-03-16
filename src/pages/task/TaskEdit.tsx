@@ -9,10 +9,12 @@ import Loading from "../common/loading";
 import { getTaskById, createTask, updateTask } from "../../features/task/api";
 import type { Task } from "../../features/task/task";
 import { useModalStore } from "../../features/Common/modalStore";
+import { useAuthStore } from "../../features/auth/authStore";
 
 function TaskEdit() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const currentUserName = useAuthStore((state) => state.name);
     const [isLoading, setIsLoading] = useState(!!id);
     const [title, setTitle] = useState("");
     const [authorId, setAuthorId] = useState("");
@@ -28,7 +30,11 @@ function TaskEdit() {
 
     useEffect(() => {
         if (!id) {
+            // 신규 등록 모드: 작성일은 오늘 날짜, 작성자는 현재 로그인한 이름으로 기본값 설정
             setCreatedDay(today());
+            if (currentUserName) {
+                setAuthorId(currentUserName);
+            }
             setIsLoading(false);
             return;
         }
@@ -46,7 +52,7 @@ function TaskEdit() {
                 }
             })
             .finally(() => setIsLoading(false));
-    }, [id]);
+    }, [id, currentUserName]);
 
     const stateList = [
         { value: "request", label: "요청" },
