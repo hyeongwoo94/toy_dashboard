@@ -1,16 +1,19 @@
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { useState } from 'react'
+
+type CalendarValue = Date | null
+
 function MainCalender() {
-    const [value, setValue] = useState(new Date())
+    const [value, setValue] = useState<CalendarValue>(new Date())
     return (
         <>
             <div className='cus_calendar'>
                 <Calendar
-                    onChange={setValue}
+                    onChange={(val) => setValue(val as CalendarValue)}
                     value={value}
                     calendarType="gregory"
-                    formatDay={(locale, date) => date.getDate()}
+                    formatDay={(_locale, date) => date.getDate().toString()}
                     tileClassName={({ date }) => {
                         const day = date.getDay()
                         if (day === 0) return "sunday"
