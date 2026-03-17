@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "pnpm": "^10.30.3",
     "react": "^19.2.0",
     "react-calendar": "^6.0.0",
     "react-datepicker": "^9.1.0",
