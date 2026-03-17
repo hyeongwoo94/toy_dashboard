@@ -74,15 +74,15 @@
     }
 }
 // 메인 레이아웃
-.main{
-    &_wrap{
+.main {
+    &_wrap {
         display: flex;
         align-items: center;
         flex-direction: column;
         height: 100%;
         width: 100%;
     }
-    &_grid{
+    &_grid {
         flex: 1;
         max-width: 1280px;
         margin: 0 auto;
@@ -93,136 +93,147 @@
         overflow: hidden;
         padding: 10px 0;
         box-sizing: border-box;
-        grid-template-rows: 1fr 1fr;  // 그리드 아이템 높이
-        grid-template-columns: 1fr 1fr 1fr;  //그리드 아이템 넓이
-        grid-template-areas: 
-        "main_list main_list main_calender"
-        "main_mywork main_notice_list main_notice_list";
-        .main_grid_box{
-            min-height: 0;           // 그리드 행 높이를 넘지 않게 (필수)
-            min-width: 0;           // 그리드 열 너비를 넘지 않게 (max-width 준수)
+        grid-template-rows: 1fr 1fr; // 그리드 아이템 높이
+        grid-template-columns: 1fr 1fr 1fr; //그리드 아이템 넓이
+        grid-template-areas:
+            "main_list main_list main_calender"
+            "main_mywork main_notice_list main_notice_list";
+        .main_grid_box {
+            min-height: 0; // 그리드 행 높이를 넘지 않게 (필수)
+            min-width: 0; // 그리드 열 너비를 넘지 않게 (max-width 준수)
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
         // 그리드 아이템 지정
-        ._list{grid-area: main_list;}
-        ._calender{grid-area: main_calender;}
-        ._myWork{grid-area: main_mywork;}
-        ._notice_list{grid-area: main_notice_list;}
+        ._list {
+            grid-area: main_list;
+        }
+        ._calender {
+            grid-area: main_calender;
+        }
+        ._myWork {
+            grid-area: main_mywork;
+        }
+        ._notice_list {
+            grid-area: main_notice_list;
+        }
         @media (max-width: 1280px) {
             padding: 10px;
         }
         @media (max-width: 768px) {
-            grid-template-rows: 1fr 1fr 1fr 1fr; 
-            grid-template-columns: 1fr;  
-            grid-template-areas: 
-            "main_list"
-            "main_calender"
-            "main_mywork"
-            "main_notice_list";
+            grid-template-rows: 1.3fr 0.85fr 0.85fr 1fr;
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "main_calender"
+                "main_notice_list"
+                "main_mywork"
+                "main_list";
         }
-    }    
+    }
 }
-.main_table_title_box{
+.main_table_title_box {
     display: flex;
-    align-items:baseline;
+    align-items: baseline;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 5px;
-    ._title{
+    ._title {
         font-size: var(--font-size-xl);
         font-weight: 700;
         color: var(--color-accent);
     }
-    ._btn{
+    ._btn {
         font-size: var(--font-size-sm);
         color: var(--color-text);
     }
 }
 // 커스텀 달력
-.cus_calendar{
+.cus_calendar {
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    background-color:var(--table-body-bg);
+    background-color: var(--table-body-bg);
     border-radius: var(--radius-md) var(--radius-md) 0 0;
-    .react-calendar{
+    .react-calendar {
         border: 0;
         width: 100%;
     }
-    .react-calendar__navigation{
+    .react-calendar__navigation {
         background-color: var(--table-header-bg);
         border-radius: var(--radius-md) var(--radius-md) 0 0;
         margin-bottom: 0;
         font-size: var(--font-size-base);
     }
-    .react-calendar__viewContainer{
+    .react-calendar__viewContainer {
         border: solid 1px var(--table-border);
     }
-    .react-calendar__month-view__weekdays__weekday{
+    .react-calendar__month-view__weekdays__weekday {
         padding: 10px 6.6667px;
     }
-    .react-calendar__tile--active{
+    .react-calendar__tile--active {
         background-color: var(--color-accent);
     }
-    .react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus {
+    .react-calendar__tile--active:enabled:hover,
+    .react-calendar__tile--active:enabled:focus {
         background-color: var(--color-accent);
     }
-    .react-calendar__tile--now{
+    .react-calendar__tile--now {
         background-color: var(--table-header-bg);
     }
-    .react-calendar__tile--now:enabled:hover, .react-calendar__tile--now:enabled:focus {
+    .react-calendar__tile--now:enabled:hover,
+    .react-calendar__tile--now:enabled:focus {
         background-color: var(--table-header-bg);
     }
-    .react-calendar__month-view__days__day--weekend{
-        &.saturday{
-            color: #2563EB;
+    .react-calendar__month-view__days__day--weekend {
+        &.saturday {
+            color: #2563eb;
         }
     }
     @media (max-width: 768px) {
-        .react-calendar__navigation{
+        .react-calendar__navigation {
             height: 25px;
         }
         .react-calendar__month-view__weekdays__weekday,
-        .react-calendar__tile{
+        .react-calendar__tile {
             padding: 0.8rem;
         }
     }
 }
 
-.cus_calendar_todo_box{
+.cus_calendar_todo_box {
     flex: 1;
     box-sizing: border-box;
     overflow-y: auto;
     display: flex;
-    flex-direction: column;
-    .calendar_notice_box{
-        border-bottom:solid 1px var(--color-primary);
-        padding: 1.5rem;
+    border: solid 1px var(--table-border);
+    box-sizing: border-box;
+    border-top: 0;
+    .calendar_notice_box {
+        width: 50%;
+        border-right: solid 1px var(--table-border);
+        padding: 1rem;
         box-sizing: border-box;
-        &:last-child{
-            border-bottom: 0;
+        &:last-child {
+            border-right: 0;
         }
     }
-    ._title{
-        font-size: var(--font-size-base);
+    ._title {
+        font-size: var(--font-size-lg);
         color: var(--color-text);
         font-weight: 800;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     }
-    ._list{
+    ._list {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        ._item{
-            font-size: var(--font-size-base);
-            background-color: var(--color-accent);
-            color: var(--color-text-w);
-            padding: 0.5rem;
+        ._item {
+            font-size: var(--font-size-sm);
+            line-height: 1.1;
+            color: var(--color-text);
+            border-bottom: solid 2px var(--color-accent);
             box-sizing: border-box;
-            border-radius: var(--radius-md);
         }
     }
 }
