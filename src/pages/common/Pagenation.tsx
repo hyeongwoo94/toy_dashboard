@@ -1,23 +1,67 @@
 import CommonBtn from "../../components/CommonBtn";
 
-function Pagenation() {
+interface PagenationProps {
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    maxVisiblePages?: number;
+}
+
+function Pagenation({
+    currentPage,
+    totalPages,
+    onPageChange,
+    maxVisiblePages = 5,
+}: PagenationProps) {
+    if (totalPages <= 1) {
+        return null;
+    }
+
+    const getVisiblePages = (): number[] => {
+        const pages: number[] = [];
+        const half = Math.floor(maxVisiblePages / 2);
+
+        let start = Math.max(1, currentPage - half);
+        const end = Math.min(totalPages, start + maxVisiblePages - 1);
+
+        if (end - start + 1 < maxVisiblePages) {
+            start = Math.max(1, end - maxVisiblePages + 1);
+        }
+
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+
+        return pages;
+    };
+
+    const visiblePages = getVisiblePages();
+
     return (
         <div className="common_pagenation">
             <ul className="_list">
-                <li className="_item">
-                    <CommonBtn text="<" />
+                <li className={`_item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <CommonBtn
+                        text="<"
+                        onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
+                    />
                 </li>
-                <li className="_item on">
-                    <CommonBtn text="1" />
-                </li>
-                <li className="_item">
-                    <CommonBtn text="50" />
-                </li>
-                <li className="_item">
-                    <CommonBtn text="100" />
-                </li>
-                <li className="_item">
-                    <CommonBtn text=">" />
+                {visiblePages.map((page) => (
+                    <li
+                        key={page}
+                        className={`_item ${page === currentPage ? "on" : ""}`}
+                    >
+                        <CommonBtn
+                            text={String(page)}
+                            onClick={() => onPageChange(page)}
+                        />
+                    </li>
+                ))}
+                <li className={`_item ${currentPage === totalPages ? "disabled" : ""}`}>
+                    <CommonBtn
+                        text=">"
+                        onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
+                    />
                 </li>
             </ul>
         </div>

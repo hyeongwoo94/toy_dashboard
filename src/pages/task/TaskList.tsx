@@ -7,6 +7,8 @@ import type { Task } from "../../features/task/task";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../features/auth/authStore";
 
+const ITEMS_PER_PAGE = 25;
+
 const columns = [
     { label: "번호", width: "7%" },
     { label: "제목" },
@@ -44,25 +46,53 @@ function taskToRow(task: Task, index: number) {
 function TaskList() {
     const navigate = useNavigate();
     const location = useLocation();
-    // 로그인된 사용자 이름 (담당자와 비교할 기준)
     const name = useAuthStore((state) => state.name);
-    // URL 쿼리(tab)로부터 현재 탭 상태 계산: 기본값은 전체(all)
+    
     const searchParams = new URLSearchParams(location.search);
     const tabParam = searchParams.get("tab");
     const tab: "all" | "mine" = tabParam === "mine" ? "mine" : "all";
+    
+    const pageParam = searchParams.get("page");
+    const currentPage = Math.max(1, parseInt(pageParam || "1", 10) || 1);
+    
     const { tasks, isLoading } = useTasks();
 
     if (isLoading) {
         return <Loading />;
     }
 
-    // 탭과 로그인 이름에 따라 화면에 보여줄 업무 목록 필터링
-    const visibleTasks =
+    const filteredTasks =
         tab === "all" || !name
             ? tasks
             : tasks.filter((task) => task.assigneeId === name);
 
-    const rows = visibleTasks.map((task, i) => taskToRow(task, i));
+    const totalPages = Math.ceil(filteredTasks.length / ITEMS_PER_PAGE);
+    const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
+    
+    const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedTasks = filteredTasks.slice(startIndex, endIndex);
+
+    const rows = paginatedTasks.map((task, i) => taskToRow(task, startIndex + i));
+
+    const handlePageChange = (page: number) => {
+        const params = new URLSearchParams(location.search);
+        if (page === 1) {
+            params.delete("page");
+        } else {
+            params.set("page", String(page));
+        }
+        const queryString = params.toString();
+        navigate(`/task${queryString ? `?${queryString}` : ""}`);
+    };
+
+    const handleTabChange = (newTab: "all" | "mine") => {
+        if (newTab === "all") {
+            navigate("/task");
+        } else {
+            navigate("/task?tab=mine");
+        }
+    };
 
     return (
         <>
@@ -71,13 +101,13 @@ function TaskList() {
                     <div className={`_btn ${tab === "all" ? "on" : ""}`}>
                         <CommonBtn
                             text="전체"
-                            onClick={() => navigate("/task")}
+                            onClick={() => handleTabChange("all")}
                         />
                     </div>
                     <div className={`_btn ${tab === "mine" ? "on" : ""}`}>
                         <CommonBtn
                             text="내 업무"
-                            onClick={() => navigate("/task?tab=mine")}
+                            onClick={() => handleTabChange("mine")}
                         />
                     </div>
                 </div>
@@ -88,7 +118,11 @@ function TaskList() {
                 rows={rows}
                 emptyMsg="등록된 게시글이 없습니다."
             />
-            <Pagenation />
+            <Pagenation
+                currentPage={validCurrentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
         </>
     );
 }
