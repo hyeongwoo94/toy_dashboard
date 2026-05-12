@@ -11,7 +11,9 @@ import TaskEdit from "./pages/task/TaskEdit";
 import TaskView from "./pages/task/TaskView";
 import CommonModal from "./components/CommonModal";
 import CommonToast from "./components/CommonToast";
+import NoticeList from "./pages/notice/NoticeList";
 import NoticeView from "./pages/notice/NoticeView";
+import NoticeEdit from "./pages/notice/NoticeEdit";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -41,7 +43,7 @@ function App() {
                         isLoggedIn ? <Navigate to="/" replace /> : <LoginPage />
                     }
                 />
-                {/* 공지사항 상세페이지 */}
+                {/* 공지사항 페이지 */}
                 <Route
                     path="/notice"
                     element={
@@ -50,7 +52,9 @@ function App() {
                         </ProtectedRoute>
                     }
                 >
+                    <Route index element={<NoticeList />} />
                     <Route path="view/:id" element={<NoticeView />} />
+                    <Route path="edit" element={<NoticeEdit />} />
                 </Route>
                 {/* 404 페이지 */}
                 <Route path="*" element={<NotFound />} />

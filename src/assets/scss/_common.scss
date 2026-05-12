@@ -230,6 +230,46 @@
         font-size: var(--font-size-base);
     }
 }
+// 공통 select
+.common_select {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    background-color: var(--color-bg-w);
+    border: solid 1px var(--color-border);
+    border-radius: var(--radius-md);
+    outline: none;
+    cursor: pointer;
+    &:focus {
+        border-color: var(--color-accent);
+    }
+    &:hover {
+        border-color: var(--color-accent-hover);
+    }
+}
+// 공통 체크박스
+.common_checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: var(--spacing-sm) 0;
+    input[type="checkbox"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        accent-color: var(--color-accent);
+        cursor: pointer;
+    }
+    ._checkbox_text {
+        font-size: var(--font-size-base);
+        color: var(--color-text);
+    }
+}
+.repeat_day_checkbox {
+    min-width: 150px;
+}
 .common_textarea {
     background-color: var(--color-bg-w);
     border: solid 1px var(--color-border);

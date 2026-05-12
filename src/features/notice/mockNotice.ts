@@ -1,6 +1,7 @@
 import type { Notice } from "./notice";
 
 // dayOfWeek: 0=일, 1=월, 2=화, 3=수, 4=목, 5=금, 6=토
+// isRecurring: true = 매주 반복, false = 특정 날짜만
 export const mockNotice: Notice[] = [
     {
         id: 1,
@@ -8,6 +9,7 @@ export const mockNotice: Notice[] = [
         content: "하루 2시간 일찍 퇴근하며 즐겁게 일할 수 있는 날입니다.",
         dayOfWeek: 5,
         name: "BigBro_woo",
+        isRecurring: true,
     },
     {
         id: 2,
@@ -15,6 +17,7 @@ export const mockNotice: Notice[] = [
         content: "1시간 일찍 퇴근 후 팀원들과 함께 식사하는 날입니다.",
         dayOfWeek: 2,
         name: "BigBro_woo",
+        isRecurring: true,
     },
     {
         id: 3,
@@ -23,6 +26,7 @@ export const mockNotice: Notice[] = [
             "지각해도 부담 없이 출근 가능, 단 당일 업무는 완료해야 합니다.",
         dayOfWeek: 1,
         name: "BigBro_woo",
+        isRecurring: true,
     },
     {
         id: 4,
@@ -31,6 +35,7 @@ export const mockNotice: Notice[] = [
             "중요 업무나 검토가 필요한 날, 평소보다 집중해서 일하는 날입니다.",
         dayOfWeek: 3,
         name: "BigBro_woo",
+        isRecurring: true,
     },
     {
         id: 5,
@@ -39,6 +44,7 @@ export const mockNotice: Notice[] = [
             "자신이나 팀원에게 칭찬을 나누며 긍정적인 분위기를 만드는 날입니다.",
         dayOfWeek: 4,
         name: "BigBro_woo",
+        isRecurring: true,
     },
     {
         id: 6,
@@ -47,5 +53,6 @@ export const mockNotice: Notice[] = [
             "대화를 하고 싶은 사람을 지정하여 불만이나 고민을 숨기지 않고 대표와 함께 삼자대면으로 서로의 생각을 공유하는 자리입니다.(대표도 지정가능)",
         dayOfWeek: 4,
         name: "BigBro_woo",
+        isRecurring: true,
     },
 ];

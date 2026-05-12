@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
-import { mockNotice } from "../../features/notice/mockNotice";
+import { useNoticeStore } from "../../features/notice/noticeStore";
 
 const dayNames = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
 
 function NoticeView() {
     const { id } = useParams();
-    const notice = mockNotice.find((n) => n.id === Number(id));
+    const notices = useNoticeStore((state) => state.notices);
+    const notice = notices.find((n) => n.id === Number(id));
 
     if (!notice) {
         return <p>공지사항을 찾을 수 없습니다.</p>;
@@ -34,9 +35,13 @@ function NoticeView() {
                                 </div>
                                 <div className="_item_w_50">
                                     <label htmlFor="" className="_task_label">
-                                        요일
+                                        {notice.isRecurring ? "반복 요일" : "날짜"}
                                     </label>
-                                    <p className="_view_text">{dayNames[notice.dayOfWeek]}</p>
+                                    <p className="_view_text">
+                                        {notice.isRecurring
+                                            ? `매주 ${dayNames[notice.dayOfWeek]}`
+                                            : notice.date ?? dayNames[notice.dayOfWeek]}
+                                    </p>
                                 </div>
                             </div>
                             <div className="_item_flex _full_height_item">

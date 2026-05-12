@@ -70,6 +70,16 @@ function markDeleted(id: string) {
     saveTaskStore(store);
 }
 
+// 새 ID 생성: 로컬 스토어와 DummyJSON 기본 범위(1-30)를 고려하여 최대 ID + 1
+function generateNextId(): string {
+    const store = loadTaskStore();
+    const localIds = Object.keys(store.byId).map((id) => Number(id) || 0);
+    const maxLocalId = localIds.length > 0 ? Math.max(...localIds) : 0;
+    // DummyJSON 기본 데이터는 보통 1-30 범위이므로, 최소 30 이상에서 시작
+    const baseId = Math.max(maxLocalId, 30);
+    return String(baseId + 1);
+}
+
 // DummyJSON 형식 → 우리 Task 형식으로 변환
 // list / view / edit 모두 같은 규칙 적용 → 화면 값 일치
 // DummyJSON은 todo/userId만 신뢰 가능한 저장값이므로, title은 todo를 그대로 사용
@@ -141,7 +151,10 @@ export async function getTasks(limit = 30, skip = 0): Promise<Task[]> {
     const localOnly = store.localOnlyIds
         .map((id) => store.byId[id])
         .filter(Boolean);
-    return [...localOnly, ...merged];
+    
+    // ID 내림차순 정렬 (최신이 위로)
+    const all = [...localOnly, ...merged];
+    return all.sort((a, b) => Number(b.id) - Number(a.id));
 }
 
 export async function getTaskById(id: string): Promise<Task | null> {
@@ -159,21 +172,22 @@ export async function getTaskById(id: string): Promise<Task | null> {
 
 export async function createTask(task: Omit<Task, "id">): Promise<Task> {
     const body = mapTaskToDummyBody(task);
-    const d = await request<DummyTodo & { id: number }>("/todos/add", {
+    // API 호출 (DummyJSON은 실제 저장 안 됨)
+    await request<DummyTodo & { id: number }>("/todos/add", {
         method: "POST",
         body,
     });
-    // 서버 응답은 영구 저장이 안 되므로, 우리가 입력한 값으로 로컬 저장까지 한다.
-    // createdDay/doneDay: 빈 문자열 ""도 ?? 로는 그대로 남으므로, 비어 있으면 작성일은 오늘로
+    // 로컬에서 고유 ID 생성 (기존 최대 ID + 1)
+    const newId = generateNextId();
     const createdDay = task.createdDay?.trim() ? task.createdDay : today();
     const doneDay = task.doneDay?.trim() ? task.doneDay : "";
     const created: Task = {
-        ...mapDummyTodoToTask(d),
+        id: newId,
         title: task.title,
         description: task.description ?? task.title,
-        status: task.status ?? (d.completed ? "done" : "request"),
-        authorId: task.authorId ?? `작성자${d.userId}`,
-        assigneeId: task.assigneeId ?? `담당자${d.userId}`,
+        status: task.status ?? "request",
+        authorId: task.authorId ?? "작성자",
+        assigneeId: task.assigneeId ?? "담당자",
         createdDay,
         doneDay,
         importStatus: task.importStatus ?? "medium",

@@ -32,18 +32,13 @@ function Header() {
                             </Link>
                         </li>
                         <li className="_menu_box">
-                            <Link to="" className="_menu_link">
-                                메뉴1
+                            <Link to="/task/edit" className="_menu_link">
+                                업무요청
                             </Link>
                         </li>
                         <li className="_menu_box">
-                            <Link to="" className="_menu_link">
-                                메뉴1
-                            </Link>
-                        </li>
-                        <li className="_menu_box">
-                            <Link to="" className="_menu_link">
-                                메뉴1
+                            <Link to="/notice" className="_menu_link">
+                                공지사항
                             </Link>
                         </li>
                     </ul>

@@ -27,13 +27,13 @@ const statusLabel: Record<string, string> = {
     done: "완료",
 };
 
-function taskToRow(task: Task, index: number) {
+function taskToRow(task: Task) {
     const desc = task.description ?? "";
     const preview = desc.length > 50 ? `${desc.slice(0, 50)}...` : desc;
     return {
         to: `/task/view/${task.id}`,
         cells: [
-            String(index + 1),
+            task.id,
             task.title,
             preview,
             task.authorId,
@@ -72,7 +72,7 @@ function TaskList() {
             : tasks.filter((task) => task.assigneeId === name);
 
     // 검색 필터링 (제목, 내용, 작성자, 담당자)
-    const filteredTasks = searchQuery.trim()
+    const searchFilteredTasks = searchQuery.trim()
         ? tabFilteredTasks.filter((task) => {
               const query = searchQuery.toLowerCase();
               return (
@@ -84,6 +84,11 @@ function TaskList() {
           })
         : tabFilteredTasks;
 
+    // ID 내림차순 정렬 (최신이 위로)
+    const filteredTasks = [...searchFilteredTasks].sort(
+        (a, b) => Number(b.id) - Number(a.id)
+    );
+
     const totalPages = Math.ceil(filteredTasks.length / ITEMS_PER_PAGE);
     const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
 
@@ -91,9 +96,7 @@ function TaskList() {
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedTasks = filteredTasks.slice(startIndex, endIndex);
 
-    const rows = paginatedTasks.map((task, i) =>
-        taskToRow(task, startIndex + i),
-    );
+    const rows = paginatedTasks.map((task) => taskToRow(task));
 
     const handlePageChange = (page: number) => {
         const params = new URLSearchParams(location.search);

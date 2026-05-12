@@ -1,5 +1,6 @@
 import CommonList from "../../components/CommonList";
-import { mockNotice } from "../../features/notice/mockNotice";
+import { useNoticeStore } from "../../features/notice/noticeStore";
+import { Link } from "react-router-dom";
 
 const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -10,21 +11,29 @@ const columns = [
     { label: "요일", width: "10%" },
 ];
 
-const rows = mockNotice.map((notice) => ({
-    to: `/notice/view/${notice.id}`,
-    cells: [
-        String(notice.id),
-        notice.name,
-        notice.title,
-        dayNames[notice.dayOfWeek],
-    ],
-}));
-
 function MainNotice() {
+    const notices = useNoticeStore((state) => state.notices);
+
+    // ID 내림차순 정렬 (최신이 위로)
+    const sortedNotices = [...notices].sort((a, b) => b.id - a.id);
+
+    const rows = sortedNotices.map((notice) => ({
+        to: `/notice/view/${notice.id}`,
+        cells: [
+            String(notice.id),
+            notice.name,
+            notice.title,
+            dayNames[notice.dayOfWeek],
+        ],
+    }));
+
     return (
         <>
             <div className="main_table_title_box">
                 <h2 className="_title">공지사항</h2>
+                <Link to="/notice" className="_btn">
+                    더보기
+                </Link>
             </div>
             <CommonList
                 columns={columns}

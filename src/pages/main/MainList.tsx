@@ -18,11 +18,11 @@ const statusLabel: Record<string, string> = {
     done: "완료",
 };
 
-function taskToRow(task: Task, index: number) {
+function taskToRow(task: Task) {
     return {
         to: `/task/view/${task.id}`,
         cells: [
-            String(index + 1),
+            task.id,
             task.title,
             task.authorId,
             task.createdDay || "-",
@@ -33,7 +33,11 @@ function taskToRow(task: Task, index: number) {
 
 function MainList() {
     const { tasks } = useTasks();
-    const rows = tasks.slice(0, 30).map((task, i) => taskToRow(task, i));
+
+    // ID 내림차순 정렬 (최신이 위로)
+    const sortedTasks = [...tasks].sort((a, b) => Number(b.id) - Number(a.id));
+
+    const rows = sortedTasks.slice(0, 30).map((task) => taskToRow(task));
 
     return (
         <>
