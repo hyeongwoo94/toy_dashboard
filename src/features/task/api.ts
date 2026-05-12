@@ -195,6 +195,30 @@ export async function updateTask(
         >
     >
 ): Promise<Task> {
+    const store = loadTaskStore();
+    const isLocalOnly = store.localOnlyIds.includes(id);
+    const existing = store.byId[id];
+
+    // 로컬에서만 생성된 업무는 API 호출 없이 로컬스토리지만 업데이트
+    if (isLocalOnly && existing) {
+        const createdDay = data.createdDay?.trim() ? data.createdDay : existing.createdDay;
+        const doneDay = data.doneDay !== undefined ? (data.doneDay?.trim() ? data.doneDay : "") : existing.doneDay ?? "";
+        const next: Task = {
+            ...existing,
+            ...(data.title !== undefined ? { title: data.title } : null),
+            ...(data.status !== undefined ? { status: data.status } : null),
+            ...(data.description !== undefined ? { description: data.description } : null),
+            createdDay,
+            doneDay,
+            ...(data.importStatus !== undefined ? { importStatus: data.importStatus } : null),
+            ...(data.authorId !== undefined ? { authorId: data.authorId } : null),
+            ...(data.assigneeId !== undefined ? { assigneeId: data.assigneeId } : null),
+        };
+        upsertLocalTask(next, { localOnly: true });
+        return next;
+    }
+
+    // 서버에 존재하는 업무는 API 호출 후 로컬스토리지 업데이트
     const body = mapTaskToDummyBody({
         title: data.title ?? "",
         status: data.status,
@@ -205,7 +229,6 @@ export async function updateTask(
         body,
     });
     const base = mapDummyTodoToTask(d);
-    // 수정 시에도 작성일/마감일이 비어 있으면 base 값 유지, 넘어온 값이 있으면 사용
     const createdDay = data.createdDay?.trim() ? data.createdDay : base.createdDay;
     const doneDay = data.doneDay !== undefined ? (data.doneDay?.trim() ? data.doneDay : "") : base.doneDay ?? "";
     const next: Task = {
@@ -235,8 +258,14 @@ export function updateTaskStatusLocal(id: string, status: TaskStatus): void {
 }
 
 export async function deleteTask(id: string): Promise<void> {
-    await request<{ id: number; isDeleted: boolean }>(`/todos/${id}`, {
-        method: "DELETE",
-    });
+    const store = loadTaskStore();
+    const isLocalOnly = store.localOnlyIds.includes(id);
+
+    // 로컬에서만 생성된 업무는 API 호출 없이 바로 삭제
+    if (!isLocalOnly) {
+        await request<{ id: number; isDeleted: boolean }>(`/todos/${id}`, {
+            method: "DELETE",
+        });
+    }
     markDeleted(id);
 }
