@@ -1,3 +1,4 @@
+import { useState } from "react";
 import CommonBtn from "../../components/CommonBtn";
 import Pagenation from "../common/Pagenation";
 import TaskTable from "./components/TaskTable";
@@ -47,33 +48,52 @@ function TaskList() {
     const navigate = useNavigate();
     const location = useLocation();
     const name = useAuthStore((state) => state.name);
-    
+
     const searchParams = new URLSearchParams(location.search);
     const tabParam = searchParams.get("tab");
     const tab: "all" | "mine" = tabParam === "mine" ? "mine" : "all";
-    
+    const searchQuery = searchParams.get("q") || "";
+
     const pageParam = searchParams.get("page");
     const currentPage = Math.max(1, parseInt(pageParam || "1", 10) || 1);
-    
+
+    const [searchInput, setSearchInput] = useState(searchQuery);
+
     const { tasks, isLoading } = useTasks();
 
     if (isLoading) {
         return <Loading />;
     }
 
-    const filteredTasks =
+    // 탭 필터링 (전체 / 내 업무)
+    const tabFilteredTasks =
         tab === "all" || !name
             ? tasks
             : tasks.filter((task) => task.assigneeId === name);
 
+    // 검색 필터링 (제목, 내용, 작성자, 담당자)
+    const filteredTasks = searchQuery.trim()
+        ? tabFilteredTasks.filter((task) => {
+              const query = searchQuery.toLowerCase();
+              return (
+                  task.title.toLowerCase().includes(query) ||
+                  (task.description ?? "").toLowerCase().includes(query) ||
+                  task.authorId.toLowerCase().includes(query) ||
+                  task.assigneeId.toLowerCase().includes(query)
+              );
+          })
+        : tabFilteredTasks;
+
     const totalPages = Math.ceil(filteredTasks.length / ITEMS_PER_PAGE);
     const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
-    
+
     const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedTasks = filteredTasks.slice(startIndex, endIndex);
 
-    const rows = paginatedTasks.map((task, i) => taskToRow(task, startIndex + i));
+    const rows = paginatedTasks.map((task, i) =>
+        taskToRow(task, startIndex + i),
+    );
 
     const handlePageChange = (page: number) => {
         const params = new URLSearchParams(location.search);
@@ -87,10 +107,43 @@ function TaskList() {
     };
 
     const handleTabChange = (newTab: "all" | "mine") => {
-        if (newTab === "all") {
-            navigate("/task");
-        } else {
-            navigate("/task?tab=mine");
+        const params = new URLSearchParams();
+        if (newTab === "mine") {
+            params.set("tab", "mine");
+        }
+        if (searchQuery) {
+            params.set("q", searchQuery);
+        }
+        const queryString = params.toString();
+        navigate(`/task${queryString ? `?${queryString}` : ""}`);
+    };
+
+    const handleSearch = () => {
+        const params = new URLSearchParams();
+        if (tab === "mine") {
+            params.set("tab", "mine");
+        }
+        if (searchInput.trim()) {
+            params.set("q", searchInput.trim());
+        }
+        const queryString = params.toString();
+        navigate(`/task${queryString ? `?${queryString}` : ""}`);
+        setSearchInput("");
+    };
+
+    const handleReset = () => {
+        setSearchInput("");
+        const params = new URLSearchParams();
+        if (tab === "mine") {
+            params.set("tab", "mine");
+        }
+        const queryString = params.toString();
+        navigate(`/task${queryString ? `?${queryString}` : ""}`);
+    };
+
+    const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            handleSearch();
         }
     };
 
@@ -110,19 +163,45 @@ function TaskList() {
                             onClick={() => handleTabChange("mine")}
                         />
                     </div>
+                    <div className="_search">
+                        <input
+                            type="text"
+                            className="_search_input"
+                            placeholder="검색어를 입력해주세요."
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            onKeyDown={handleSearchKeyDown}
+                        />
+                        <CommonBtn
+                            text="검색"
+                            btnClass="_search_btn"
+                            onClick={handleSearch}
+                        />
+                        <CommonBtn
+                            text="초기화"
+                            btnClass="_search_btn -cancel"
+                            onClick={handleReset}
+                        />
+                    </div>
                 </div>
-                <CommonBtn btnClass="add_task_btn" text="업무 등록" onClick={() => navigate("/task/edit")} />
             </div>
             <TaskTable
                 columns={columns}
                 rows={rows}
                 emptyMsg="등록된 게시글이 없습니다."
             />
-            <Pagenation
-                currentPage={validCurrentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-            />
+            <div className="task_list_bottom">
+                <Pagenation
+                    currentPage={validCurrentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+                <CommonBtn
+                    btnClass="add_task_btn"
+                    text="업무 등록"
+                    onClick={() => navigate("/task/edit")}
+                />
+            </div>
         </>
     );
 }

@@ -34,11 +34,11 @@
 }
 //공통 탭 버튼 레이아웃
 .tab_btn_layout {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    display: flex;
     gap: 0.6rem;
     width: 100%;
     ._btn {
+        min-width: 10rem;
         &.on {
             .common_btn {
                 background-color: var(--color-accent);
@@ -56,6 +56,32 @@
                 color: var(--color-text-w);
                 box-shadow: none;
             }
+        }
+    }
+    ._search {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        gap: 0.5rem;
+        ._search_input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.5rem 1rem;
+            font-size: var(--font-size-base);
+            border: solid 1px var(--color-border);
+            border-radius: var(--radius-md);
+            outline: none;
+            &:focus {
+                border-color: var(--color-accent);
+            }
+            &::placeholder {
+                color: var(--color-text-muted);
+            }
+        }
+        ._search_btn {
+            flex-shrink: 0;
+            width: auto;
+            padding: 0.5rem 1.5rem;
         }
     }
 }
@@ -314,6 +340,7 @@
 }
 // 페이지 네이션
 .common_pagenation {
+    // min-height: 2.8rem;
     ._list {
         display: flex;
         align-items: center;

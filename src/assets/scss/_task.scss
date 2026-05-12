@@ -1,10 +1,19 @@
-.task_list_top{
+.task_list_top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .add_task_btn{
+    .add_task_btn {
         max-width: 10rem;
         min-width: 10rem;
+    }
+}
+.task_list_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    .add_task_btn {
+        max-width: 100px;
     }
 }
 .task_edit {
@@ -41,7 +50,7 @@
             @media (max-width: 768px) {
                 flex-direction: column;
                 &._full_height_item {
-                   flex-direction: row;
+                    flex-direction: row;
                 }
             }
         }
@@ -83,7 +92,7 @@
         }
     }
 }
-.task_view_top_btn_layout{
+.task_view_top_btn_layout {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -101,7 +110,7 @@
         border: solid 1px var(--color-border);
         padding: 1.5rem;
         font-size: var(--font-size-base);
-        .empty_text{
+        .empty_text {
             display: flex;
             flex-direction: column;
             height: 100%;

@@ -4,7 +4,11 @@ import TaskDate from "./components/TaskDate";
 import TaskInput from "./components/TaskInput";
 import TaskState from "./components/TaskState";
 import CommonBtn from "../../components/CommonBtn";
-import { getTaskById, updateTaskStatusLocal, deleteTask } from "../../features/task/api";
+import {
+    getTaskById,
+    updateTaskStatusLocal,
+    deleteTask,
+} from "../../features/task/api";
 import { useModalStore } from "../../features/Common/modalStore";
 import TaskTextarea from "./components/TaskTextarea";
 import Loading from "../common/loading";
@@ -60,7 +64,8 @@ function TaskView() {
     };
 
     if (isLoading) return <Loading />;
-    if (!id || !task) return <p className="_view_text">해당 업무를 찾을 수 없습니다.</p>;
+    if (!id || !task)
+        return <p className="_view_text">해당 업무를 찾을 수 없습니다.</p>;
 
     // 상태 변경 가능 조건:
     // 1) 관리자(admin) 이거나
@@ -120,10 +125,18 @@ function TaskView() {
                             </div>
                             <div className="_item_flex">
                                 <div className="_item_w_50">
-                                    <TaskDate mode="view" label="작성일" value={task.createdDay} />
+                                    <TaskDate
+                                        mode="view"
+                                        label="작성일"
+                                        value={task.createdDay}
+                                    />
                                 </div>
                                 <div className="_item_w_50">
-                                    <TaskDate mode="view" label="마감일" value={task.doneDay} />
+                                    <TaskDate
+                                        mode="view"
+                                        label="마감일"
+                                        value={task.doneDay}
+                                    />
                                 </div>
                             </div>
                             <div className="_item_flex">
@@ -133,7 +146,9 @@ function TaskView() {
                                     </label>
                                     <TaskState
                                         states={importanceList}
-                                        currentStatus={task.importStatus ?? "low"}
+                                        currentStatus={
+                                            task.importStatus ?? "low"
+                                        }
                                         readOnly
                                     />
                                 </div>
@@ -157,7 +172,7 @@ function TaskView() {
                                                     | "request"
                                                     | "in-progress"
                                                     | "review"
-                                                    | "done"
+                                                    | "done",
                                             );
                                         }}
                                     />
@@ -176,7 +191,10 @@ function TaskView() {
                                 </div>
                             </div>
                             <div className="_item_flex _full_height_item">
-                                <TaskTextarea mode="view" value={task.description} />                                
+                                <TaskTextarea
+                                    mode="view"
+                                    value={task.description}
+                                />
                             </div>
                         </div>
                     </form>
