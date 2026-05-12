@@ -10,6 +10,7 @@ import TaskList from "./pages/task/TaskList";
 import TaskEdit from "./pages/task/TaskEdit";
 import TaskView from "./pages/task/TaskView";
 import CommonModal from "./components/CommonModal";
+import CommonToast from "./components/CommonToast";
 import NoticeView from "./pages/notice/NoticeView";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -70,6 +71,8 @@ function App() {
             </Routes>
             {/* 전역 모달: Route 아님. 필요할 때 useModalStore().open() 으로 연다 */}
             <CommonModal />
+            {/* 전역 토스트: useToastStore().show() 으로 사용 */}
+            <CommonToast />
         </>
     );
 }

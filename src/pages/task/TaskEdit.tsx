@@ -9,35 +9,32 @@ import Loading from "../common/loading";
 import { getTaskById, createTask, updateTask } from "../../features/task/api";
 import type { Task } from "../../features/task/task";
 import { useModalStore } from "../../features/Common/modalStore";
+import { useToastStore } from "../../features/Common/toastStore";
 import { useAuthStore } from "../../features/auth/authStore";
+import { mockUsers } from "../../features/user/mockUsers";
 
 function TaskEdit() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const currentUserName = useAuthStore((state) => state.name);
+    
+    const today = () => new Date().toISOString().slice(0, 10);
+    
+    // 신규 등록 모드: 초기값을 바로 설정 (useEffect에서 setState 호출 방지)
     const [isLoading, setIsLoading] = useState(!!id);
     const [title, setTitle] = useState("");
-    const [authorId, setAuthorId] = useState("");
+    const [authorId, setAuthorId] = useState(() => (!id && currentUserName) ? currentUserName : "");
     const [assigneeId, setAssigneeId] = useState("");
-    const [createdDay, setCreatedDay] = useState("");
+    const [createdDay, setCreatedDay] = useState(() => !id ? today() : "");
     const [doneDay, setDoneDay] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState<Task["status"]>("request");
     const [importance, setImportance] = useState<Task["importStatus"]>("low");
 
-    // 등록 모드: 작성일은 오늘로 고정(readonly)
-    const today = () => new Date().toISOString().slice(0, 10);
-
     useEffect(() => {
-        if (!id) {
-            // 신규 등록 모드: 작성일은 오늘 날짜, 작성자는 현재 로그인한 이름으로 기본값 설정
-            setCreatedDay(today());
-            if (currentUserName) {
-                setAuthorId(currentUserName);
-            }
-            setIsLoading(false);
-            return;
-        }
+        // 신규 등록 모드는 초기값이 이미 설정되어 있으므로 스킵
+        if (!id) return;
+        
         getTaskById(id)
             .then((task) => {
                 if (task) {
@@ -52,7 +49,7 @@ function TaskEdit() {
                 }
             })
             .finally(() => setIsLoading(false));
-    }, [id, currentUserName]);
+    }, [id]);
 
     const stateList = [
         { value: "request", label: "요청" },
@@ -67,9 +64,23 @@ function TaskEdit() {
     ];
 
     const openModal = useModalStore((s) => s.open);
+    const showToast = useToastStore((s) => s.show);
+
+    const validUserNames = mockUsers.map((user) => user.name);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        // 담당자 유효성 검사
+        if (!assigneeId.trim()) {
+            showToast("담당자를 입력해주세요.", "error");
+            return;
+        }
+        if (!validUserNames.includes(assigneeId.trim())) {
+            showToast("담당자를 찾을 수 없습니다. 등록된 사용자 이름을 입력해주세요.", "error");
+            return;
+        }
+
         const payload = {
             title,
             createdDay,

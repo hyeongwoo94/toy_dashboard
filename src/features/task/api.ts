@@ -54,7 +54,8 @@ function upsertLocalTask(task: Task, options?: { localOnly?: boolean }) {
     const store = loadTaskStore();
     store.byId[task.id] = task;
     if (options?.localOnly) {
-        if (!store.localOnlyIds.includes(task.id)) store.localOnlyIds.unshift(task.id);
+        if (!store.localOnlyIds.includes(task.id))
+            store.localOnlyIds.unshift(task.id);
     }
     // 수정/생성되면 삭제 목록에서 제거
     store.deletedIds = store.deletedIds.filter((x) => x !== task.id);
@@ -77,7 +78,7 @@ function mapDummyTodoToTask(d: DummyTodo): Task {
     const title = d.todo;
     // 작성자/담당자는 서버에 별도 필드가 없어서 userId 기반으로 커스텀 표시
     const authorId = `작성자${d.userId}`;
-    const assigneeId = `담당자${d.userId}`;
+    const assigneeId = `팀원${d.userId}`;
     const createdDay = today(); // 커스텀 (서버에 없음, 오늘 날짜)
     return {
         id: String(d.id),
@@ -93,7 +94,11 @@ function mapDummyTodoToTask(d: DummyTodo): Task {
 }
 
 // 우리 Task → DummyJSON 요청 body 형식 (create/update용)
-function mapTaskToDummyBody(task: { title: string; status?: TaskStatus; authorId?: string }) {
+function mapTaskToDummyBody(task: {
+    title: string;
+    status?: TaskStatus;
+    authorId?: string;
+}) {
     const authorDigits = (task.authorId ?? "").match(/\d+/)?.[0];
     return {
         todo: task.title,
@@ -106,7 +111,7 @@ function mapTaskToDummyBody(task: { title: string; status?: TaskStatus; authorId
 // 공통 요청 함수 (우리 창구가 그쪽 창구에 요청 보내는 곳)
 async function request<T>(
     path: string,
-    options?: { method?: string; body?: object }
+    options?: { method?: string; body?: object },
 ): Promise<T> {
     const url = `${BASE_URL}${path}`;
     const res = await fetch(url, {
@@ -124,7 +129,7 @@ async function request<T>(
 
 export async function getTasks(limit = 30, skip = 0): Promise<Task[]> {
     const data = await request<DummyTodosResponse>(
-        `/todos?limit=${limit}&skip=${skip}`
+        `/todos?limit=${limit}&skip=${skip}`,
     );
     const store = loadTaskStore();
     const base = data.todos.map((d) => mapDummyTodoToTask(d));
@@ -152,9 +157,7 @@ export async function getTaskById(id: string): Promise<Task | null> {
     }
 }
 
-export async function createTask(
-    task: Omit<Task, "id">
-): Promise<Task> {
+export async function createTask(task: Omit<Task, "id">): Promise<Task> {
     const body = mapTaskToDummyBody(task);
     const d = await request<DummyTodo & { id: number }>("/todos/add", {
         method: "POST",
@@ -193,7 +196,7 @@ export async function updateTask(
             | "doneDay"
             | "importStatus"
         >
-    >
+    >,
 ): Promise<Task> {
     const store = loadTaskStore();
     const isLocalOnly = store.localOnlyIds.includes(id);
@@ -201,18 +204,33 @@ export async function updateTask(
 
     // 로컬에서만 생성된 업무는 API 호출 없이 로컬스토리지만 업데이트
     if (isLocalOnly && existing) {
-        const createdDay = data.createdDay?.trim() ? data.createdDay : existing.createdDay;
-        const doneDay = data.doneDay !== undefined ? (data.doneDay?.trim() ? data.doneDay : "") : existing.doneDay ?? "";
+        const createdDay = data.createdDay?.trim()
+            ? data.createdDay
+            : existing.createdDay;
+        const doneDay =
+            data.doneDay !== undefined
+                ? data.doneDay?.trim()
+                    ? data.doneDay
+                    : ""
+                : (existing.doneDay ?? "");
         const next: Task = {
             ...existing,
             ...(data.title !== undefined ? { title: data.title } : null),
             ...(data.status !== undefined ? { status: data.status } : null),
-            ...(data.description !== undefined ? { description: data.description } : null),
+            ...(data.description !== undefined
+                ? { description: data.description }
+                : null),
             createdDay,
             doneDay,
-            ...(data.importStatus !== undefined ? { importStatus: data.importStatus } : null),
-            ...(data.authorId !== undefined ? { authorId: data.authorId } : null),
-            ...(data.assigneeId !== undefined ? { assigneeId: data.assigneeId } : null),
+            ...(data.importStatus !== undefined
+                ? { importStatus: data.importStatus }
+                : null),
+            ...(data.authorId !== undefined
+                ? { authorId: data.authorId }
+                : null),
+            ...(data.assigneeId !== undefined
+                ? { assigneeId: data.assigneeId }
+                : null),
         };
         upsertLocalTask(next, { localOnly: true });
         return next;
@@ -229,19 +247,32 @@ export async function updateTask(
         body,
     });
     const base = mapDummyTodoToTask(d);
-    const createdDay = data.createdDay?.trim() ? data.createdDay : base.createdDay;
-    const doneDay = data.doneDay !== undefined ? (data.doneDay?.trim() ? data.doneDay : "") : base.doneDay ?? "";
+    const createdDay = data.createdDay?.trim()
+        ? data.createdDay
+        : base.createdDay;
+    const doneDay =
+        data.doneDay !== undefined
+            ? data.doneDay?.trim()
+                ? data.doneDay
+                : ""
+            : (base.doneDay ?? "");
     const next: Task = {
         ...base,
         id,
         ...(data.title !== undefined ? { title: data.title } : null),
         ...(data.status !== undefined ? { status: data.status } : null),
-        ...(data.description !== undefined ? { description: data.description } : null),
+        ...(data.description !== undefined
+            ? { description: data.description }
+            : null),
         createdDay,
         doneDay,
-        ...(data.importStatus !== undefined ? { importStatus: data.importStatus } : null),
+        ...(data.importStatus !== undefined
+            ? { importStatus: data.importStatus }
+            : null),
         ...(data.authorId !== undefined ? { authorId: data.authorId } : null),
-        ...(data.assigneeId !== undefined ? { assigneeId: data.assigneeId } : null),
+        ...(data.assigneeId !== undefined
+            ? { assigneeId: data.assigneeId }
+            : null),
     };
     upsertLocalTask(next);
     return next;
