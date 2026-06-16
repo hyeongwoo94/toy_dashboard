@@ -41,6 +41,11 @@ function Header() {
                                 공지사항
                             </Link>
                         </li>
+                        <li className="_menu_box">
+                            <Link to="/explain" className="_menu_link">
+                                사이트설명
+                            </Link>
+                        </li>
                     </ul>
                     <div className="_right">
                         <p className="user_name">{name ?? ""}</p>

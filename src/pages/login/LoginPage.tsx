@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Btn from "../../components/CommonBtn";
 import { useAuthStore } from "../../features/auth/authStore";
+import type { User } from "../../features/user/user";
 import { mockUsers } from "../../features/user/mockUsers";
+import LoginInfoModal from "./component/LoginInfoModal";
 import LoginInput from "./component/LoginInput";
 
 function LoginPage() {
@@ -9,8 +11,17 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const [loginIdError, setLoginIdError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [isInfoOpen, setIsInfoOpen] = useState(true);
     const login = useAuthStore((state) => state.login);
 
+    const handleAccountSelect = (user: User) => {
+        setLoginIdError(false);
+        setPasswordError(false);
+        setLoginId(user.loginId);
+        setPassword(user.password);
+        login(user.name, user.role);
+        setIsInfoOpen(false);
+    };
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setLoginIdError(false);
@@ -39,6 +50,11 @@ function LoginPage() {
 
     return (
         <>
+            <LoginInfoModal
+                isOpen={isInfoOpen}
+                onClose={() => setIsInfoOpen(false)}
+                onSelectAccount={handleAccountSelect}
+            />
             <div className="login_sec">
                 <div className="-wrap">
                     <h2 className="-title">나만의 테스크페이지</h2>
@@ -75,7 +91,16 @@ function LoginPage() {
                                 />
                             </li>
                         </ul>
-                        <Btn text="로그인" btnClass="" type="submit" />
+                        <div className="-btn_area">
+                            <Btn text="로그인" btnClass="" type="submit" />
+                            <button
+                                type="button"
+                                className="-info_btn"
+                                onClick={() => setIsInfoOpen(true)}
+                            >
+                                테스트 계정 안내
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
