@@ -11,12 +11,11 @@ import { useAuthStore } from "../../features/auth/authStore";
 const ITEMS_PER_PAGE = 25;
 
 const columns = [
-    { label: "번호", width: "7%" },
+    { label: "번호", width: "8%" },
     { label: "제목" },
-    { label: "내용", width: "40%" },
-    { label: "작성자", width: "10%" },
-    { label: "담당자", width: "10%" },
-    { label: "날짜", width: "10%" },
+    { label: "작성자", width: "12%" },
+    { label: "담당자", width: "12%" },
+    { label: "날짜", width: "12%" },
     { label: "상태", width: "10%" },
 ];
 
@@ -28,14 +27,11 @@ const statusLabel: Record<string, string> = {
 };
 
 function taskToRow(task: Task) {
-    const desc = task.description ?? "";
-    const preview = desc.length > 50 ? `${desc.slice(0, 50)}...` : desc;
     return {
         to: `/task/view/${task.id}`,
         cells: [
             task.id,
             task.title,
-            preview,
             task.authorId,
             task.assigneeId,
             task.createdDay || "-",

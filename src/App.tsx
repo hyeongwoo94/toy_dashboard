@@ -14,6 +14,7 @@ import CommonToast from "./components/CommonToast";
 import NoticeList from "./pages/notice/NoticeList";
 import NoticeView from "./pages/notice/NoticeView";
 import NoticeEdit from "./pages/notice/NoticeEdit";
+import ExplainPage from "./pages/explain/ExplainPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -71,6 +72,17 @@ function App() {
                     <Route path="edit" element={<TaskEdit />} />
                     <Route path="edit/:id" element={<TaskEdit />} />
                     <Route path="view/:id" element={<TaskView />} />
+                </Route>
+                {/* 사이트 설명 페이지 */}
+                <Route
+                    path="/explain"
+                    element={
+                        <ProtectedRoute>
+                            <SubPageLayout />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route index element={<ExplainPage />} />
                 </Route>
             </Routes>
             {/* 전역 모달: Route 아님. 필요할 때 useModalStore().open() 으로 연다 */}

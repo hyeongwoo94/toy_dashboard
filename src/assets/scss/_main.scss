@@ -18,7 +18,7 @@
             max-width: 200px;
             width: 100%;
             @media (max-width: 768px) {
-                max-width: 80px;
+                max-width: 115px;
             }
             .logo_box {
                 display: block;
@@ -40,10 +40,7 @@
             max-width: 200px;
             width: 100%;
             @media (max-width: 768px) {
-                max-width: 80px;
-                flex-direction: column-reverse;
-                align-items: flex-end;
-                gap: 0.5rem;
+                display: none;
             }
             .user_name {
                 width: max-content;
@@ -57,6 +54,29 @@
                 }
             }
         }
+        .header_hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            @media (max-width: 768px) {
+                display: flex;
+            }
+            ._bar {
+                display: block;
+                width: 2.6rem;
+                height: 2px;
+                background-color: var(--color-primary);
+                border-radius: 1px;
+            }
+        }
     }
     &_menu {
         display: flex;
@@ -65,11 +85,127 @@
         gap: 2rem;
         max-width: 1280px;
         width: 100%;
+        @media (max-width: 768px) {
+            display: none;
+        }
         ._menu_box {
             ._menu_link {
                 font-size: var(--font-size-base);
                 color: var(--color-text);
+                font-weight: 400;
+                transition: color 0.2s;
             }
+            &.on {
+                ._menu_link {
+                    color: var(--color-accent);
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    &_mobile_drawer {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        pointer-events: none;
+        visibility: hidden;
+
+        &.on {
+            pointer-events: auto;
+            visibility: visible;
+
+            ._overlay {
+                opacity: 1;
+            }
+
+            ._panel {
+                transform: translateX(0);
+            }
+        }
+
+        ._overlay {
+            position: absolute;
+            inset: 0;
+            padding: 0;
+            border: none;
+            background-color: rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        ._panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            width: min(280px, 85vw);
+            height: 100%;
+            padding: 1.25rem 1rem;
+            box-sizing: border-box;
+            background-color: var(--color-bg-w);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        ._panel_head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--header-border);
+
+            .user_name {
+                margin: 0;
+                font-size: var(--font-size-base);
+                font-weight: bold;
+                color: var(--color-text);
+            }
+        }
+
+        ._close_btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            background: none;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            cursor: pointer;
+        }
+
+        .header_mobile_menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            flex: 1;
+
+            ._menu_box {
+                ._menu_link {
+                    display: block;
+                    padding: 0.875rem 0.5rem;
+                    font-size: var(--font-size-base);
+                    color: var(--color-text);
+                    font-weight: 400;
+                }
+
+                &.on {
+                    ._menu_link {
+                        color: var(--color-accent);
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        ._panel_footer {
+            padding-top: 1rem;
+            border-top: 1px solid var(--header-border);
         }
     }
 }
