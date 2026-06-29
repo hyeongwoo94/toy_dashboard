@@ -96,7 +96,7 @@ function LoginPage() {
                             <button
                                 type="button"
                                 className="-info_btn"
-                                onClick={() => setIsInfoOpen(true)}
+                                onClick={() => setIsInfoOpen((prev) => !prev)}
                             >
                                 테스트 계정 안내
                             </button>
